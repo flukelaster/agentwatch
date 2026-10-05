@@ -1,7 +1,13 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Both windows may talk to the app's own commands. No filesystem, shell or network plugins are granted.",
-  "windows": ["main", "menubar"],
-  "permissions": ["core:default"]
+  "description": "Both windows may talk to the app's own commands and the updater (which checks GitHub Releases for a newer signed build). No filesystem, shell or general network plugins are granted.",
+  "windows": [
+    "main",
+    "menubar"
+  ],
+  "permissions": [
+    "core:default",
+    "updater:default"
+  ]
 }

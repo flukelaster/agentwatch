@@ -341,6 +341,14 @@ fn show_main_window(app: AppHandle, path: Option<String>) -> Result<(), String> 
     show_main(&app, path.as_deref())
 }
 
+/// After an update was installed: stop the daemon properly (it runs from the bundle that was just replaced), then start the new build.
+#[tauri::command]
+fn relaunch(app: AppHandle) {
+    QUITTING.store(true, Ordering::Relaxed);
+    stop_daemon(&app);
+    app.restart();
+}
+
 /// Where the popover's top-left goes: centered under the status item, then clamped so it never
 /// hangs off the edge of the display the item is on. All values are physical pixels.
 fn popover_origin(item: (f64, f64, f64, f64), win_w: f64, screen: (f64, f64, f64), margin: f64) -> (i32, i32) {
@@ -395,8 +403,9 @@ pub fn run() {
     let hidden = std::env::args().any(|a| a == "--hidden");
 
     let app = tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(DaemonChild::default())
-        .invoke_handler(tauri::generate_handler![mint_capability, show_main_window])
+        .invoke_handler(tauri::generate_handler![mint_capability, show_main_window, relaunch])
         .setup(move |app| {
             let handle = app.handle().clone();
             // `kill`, a logout or a shutdown send SIGTERM: stop the daemon properly instead of just dying.

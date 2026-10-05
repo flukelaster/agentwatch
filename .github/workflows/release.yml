@@ -1,0 +1,83 @@
+# Publishing a release: node scripts/set-version.mjs X.Y.Z, commit, then `git tag vX.Y.Z && git push --follow-tags`.
+# This builds the Apple Silicon and Intel apps, signs the update bundles with the updater key and attaches the DMGs,
+# the update bundles and latest.json (what the in-app updater reads) to a GitHub Release.
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: The tag is the app's version
+        run: |
+          v="$(node -p "require('./apps/desktop/src-tauri/tauri.conf.json').version")"
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "tag ${GITHUB_REF_NAME} does not match the app version v$v (run scripts/set-version.mjs)"; exit 1; }
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  build:
+    needs: test
+    runs-on: macos-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        arch: [aarch64, x86_64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - run: pnpm install --frozen-lockfile
+      - name: Build the app, the DMG and the signed update bundle
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bash scripts/build-macos.sh ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.arch }}
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: dist-*
+          merge-multiple: true
+      - name: Write latest.json and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          node scripts/make-latest-json.mjs dist "$version" "$GITHUB_REPOSITORY"
+          ls -l dist
+          gh release create "$GITHUB_REF_NAME" dist/* --title "AgentWatch $version" --generate-notes

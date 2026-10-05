@@ -5,7 +5,8 @@ import { ResultList, SetupRow } from "../components/Setup";
 import { ThemePicker } from "../components/ThemePicker";
 import { itemInfos, useSetup } from "../lib/setup";
 import { useDaemon, useLive, useQuery } from "../lib/context";
-import { saveTextFile } from "../lib/native";
+import { isTauri, saveTextFile } from "../lib/native";
+import { UpdatesPanel } from "../components/Updates";
 import type { LogsResult } from "../lib/types";
 import { buildDiagnosticsBundle, exportFilename } from "./Logs";
 import "../styles/settings.css";
@@ -129,7 +130,7 @@ export function Settings() {
 
   return (
     <>
-      <PageHead title="Settings" sub="Anything that contains your words stays off until you turn it on. AgentWatch never leaves this Mac." />
+      <PageHead title="Settings" sub="Anything that contains your words stays off until you turn it on. Your sessions never leave this Mac. The only request AgentWatch makes is the update check, which you can turn off below." />
       {q.error && !s && <div className="settings-alert" role="alert">Could not load settings: {q.error}</div>}
       {!s && !q.error && <p className="settings-status" role="status">Loading settings…</p>}
       {error && (
@@ -156,6 +157,8 @@ export function Settings() {
         <Panel title="APPEARANCE" right={<span className="group-note">applies at once, kept on this Mac</span>}>
           <ThemePicker />
         </Panel>
+
+        {isTauri() && <UpdatesPanel />}
 
         <Panel title="PRIVACY" right={<span className="group-note">what gets written to disk</span>}>
           <Row

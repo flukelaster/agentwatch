@@ -16,6 +16,7 @@
     "@fontsource-variable/geist": "^5.2.0",
     "@fontsource-variable/geist-mono": "^5.2.0",
     "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-updater": "^2.13.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

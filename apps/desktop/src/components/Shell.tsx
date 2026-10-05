@@ -4,6 +4,8 @@ import { pendingRequests, runningCount } from "../lib/store";
 import { href, useRoute } from "../lib/router";
 import type { Settings } from "@agentwatch/protocol";
 import { Dot, Icon, LockIcon, Logo, NAV } from "./ui";
+import { UpdateBanner } from "./Updates";
+import { startAutoCheck } from "../lib/updater";
 
 function activeFor(path: string, current: string): boolean {
   if (path === "/") return current === "/";
@@ -34,6 +36,7 @@ export function Shell({ children }: { children: ReactNode }) {
   // the page scrolls inside the window now, so a new page starts at the top by itself
   const mainRef = useRef<HTMLElement>(null);
   const path = route.path;
+  useEffect(() => startAutoCheck(), []);
   useEffect(() => {
     mainRef.current?.scrollTo?.({ top: 0 });
   }, [path]);
@@ -85,6 +88,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </nav>
         <main className="main" ref={mainRef}>
           {live.status === "disconnected" && <DisconnectedBanner message={live.error} />}
+          <UpdateBanner />
           {children}
         </main>
       </div>

@@ -10,7 +10,7 @@ See what every agent is doing right now, what it just did, what changed, and the
 ![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-black?logo=apple)
 ![Tauri 2](https://img.shields.io/badge/Tauri-2-24C8DB?logo=tauri&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
-![local only](https://img.shields.io/badge/data-never%20leaves%20this%20Mac-2ea44f)
+![local only](https://img.shields.io/badge/sessions-never%20leave%20this%20Mac-2ea44f)
 ![tests](https://img.shields.io/badge/tests-416%20passing-2ea44f)
 
 </div>
@@ -72,7 +72,8 @@ The full, unvarnished list of what is proven and what is not is in [Status](#sta
 ## Private by construction
 
 - **Local only.** The service binds to `127.0.0.1`; there is no analytics, no crash upload, and the app's content-security policy
-  only allows loopback.
+  only allows loopback. The one request the app makes is the update check (below), which sends nothing about you or your sessions
+  and can be turned off in Settings.
 - **Your words stay off until you turn them on.** Prompt and reply text is never stored by default. A raw hook payload is reduced
   to metadata by the adapter, then an allow-list runs before anything is stored or streamed.
 - **Secrets are scrubbed** from command lines and errors at the single choke point every event passes through.
@@ -80,7 +81,20 @@ The full, unvarnished list of what is proven and what is not is in [Status](#sta
 
 Details are under [Privacy, as enforced in code](#privacy-as-enforced-in-code).
 
-## Get it running
+## Download
+
+Get the latest `.dmg` from [Releases](https://github.com/flukelaster/agentwatch/releases/latest): `AgentWatch_<version>_aarch64.dmg` for Apple
+Silicon, `AgentWatch_<version>_x64.dmg` for Intel. Drag AgentWatch to Applications, open it, press **Set up**.
+
+The app is **ad-hoc signed, not notarised**, so the first launch is blocked by Gatekeeper. Right-click the app → **Open** → **Open**,
+or run `xattr -dr com.apple.quarantine /Applications/AgentWatch.app` once.
+
+**Updates are automatic.** The dashboard looks for a newer build shortly after it opens and every few hours after that, and
+**Settings → Updates** has a *Check for updates* button. An update is downloaded from GitHub Releases and installed only if its
+signature matches the key built into the app; nothing about you or your sessions is sent. Turn the automatic check off in the same place.
+Updates install without the Gatekeeper prompt, so only the very first install needs the step above.
+
+## Get it running (from source)
 
 ```sh
 git clone https://github.com/flukelaster/agentwatch.git
@@ -154,9 +168,23 @@ node scripts/readme-shots.mjs  # regenerate docs/images from the demo data (neve
 node scripts/prepare-runtime.mjs                 # downloads official Node 24 (checksum verified) + bundles the service, CLI, node-pty
 cd apps/desktop && pnpm exec tauri build --bundles app
 scripts/build-macos.sh [aarch64|x86_64]          # app + dmg into dist/, ad-hoc signed (APPLE_SIGNING_IDENTITY for a real one; PRETTY_DMG=1 for the styled Finder window)
+                                                 # with TAURI_SIGNING_PRIVATE_KEY set it also writes the signed update bundle (.app.tar.gz + .sig)
 node scripts/app-smoke.mjs                       # copies the .app elsewhere, empty HOME, proves the whole flow (see below)
 node scripts/bench.mjs                           # latency, memory, CPU
 ```
+
+### Releasing
+
+```sh
+node scripts/set-version.mjs 0.2.0                 # one version everywhere: app, packages, daemon
+git commit -am "Release v0.2.0" && git tag v0.2.0 && git push --follow-tags
+```
+
+`.github/workflows/release.yml` runs the tests, builds Apple Silicon and Intel, signs the update bundles and publishes a GitHub Release
+with the DMGs, the update bundles and `latest.json` (the manifest the app reads). It needs one repository secret,
+`TAURI_SIGNING_PRIVATE_KEY`: the private half of the updater key whose public half is in `tauri.conf.json` (`plugins.updater.pubkey`).
+Make one with `pnpm --dir apps/desktop tauri signer generate -w ~/.tauri/agentwatch-updater.key`. **Keep it safe: an app can only be
+updated by a build signed with the key it shipped with.**
 
 Quit any hand-started `pnpm daemon` before opening the app: the app reuses a service that is already running, and an old one
 does not have the hook endpoint.
@@ -226,6 +254,7 @@ text is **Low**, and an adapter cannot claim more than its source supports. Obse
 | Set up / Settings → Connections | Real installs with backups, idempotent, migrates the older Node-style hook entries; tested in throwaway homes |
 | Packaged app | Apple Silicon and Intel `.app` + `.dmg` built (`dist/`, ad-hoc signed). The smoke test passes on both (Intel under Rosetta). Run from a disk image, it refuses to install the command / login item |
 | Menu bar | Windows on demand, popover rendering and placement math tested. **A real click on the status item was never exercised** (on the test Mac a menu-bar manager pushed the item off-screen) |
+| Release pipeline and auto update | Tag → GitHub Actions → Release (DMGs, signed update bundles, `latest.json`); the app checks, downloads, verifies and installs. The workflow has not run yet, and the update flow has been exercised only by the unit tests so far |
 | Release scripts (sign, notarize, pkg) | Written, syntax-checked, never run: they need an Apple Developer account. The Node sidecar needs the JIT entitlement, which the script grants |
 
 Not done: notarized/signed distribution (the DMGs are ad-hoc signed: Gatekeeper will warn), proof of Codex, Gemini CLI, Antigravity CLI and Cursor hook payloads against live traffic, hook support for OpenCode (it takes a JS plugin, not a hooks file) and Crush (nothing to hook; use `agentwatch run -- crush`), a live Codex App Server session runner, a Rust rewrite of the service,

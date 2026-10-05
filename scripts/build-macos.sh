@@ -5,6 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+version="$(node -p "require('./apps/desktop/src-tauri/tauri.conf.json').version")"
 arch="${1:-$(uname -m)}"
 case "$arch" in
   arm64|aarch64) triple="aarch64-apple-darwin"; label="aarch64"; prep="aarch64" ;;
@@ -32,7 +33,14 @@ rustup target add "$triple" >/dev/null 2>&1 || true
 # window on every build, and it is the step that sometimes fails. CI=true skips it (same DMG, default icon layout).
 # PRETTY_DMG=1 brings the styled window back for a release build.
 [ "${PRETTY_DMG:-}" = "1" ] || export CI=true
-build() { (cd apps/desktop && pnpm tauri build --target "$triple" --bundles dmg,app); }
+# The update bundle (.app.tar.gz + .sig) is signed with the updater key. Without the key (a local build that will not be
+# published) it is left out instead of failing the build.
+updater_cfg=()
+if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ] && [ -z "${TAURI_SIGNING_PRIVATE_KEY_PATH:-}" ]; then
+  echo "==> no TAURI_SIGNING_PRIVATE_KEY: building without update artifacts (the DMG is unaffected)"
+  updater_cfg=(--config '{"bundle":{"createUpdaterArtifacts":false}}')
+fi
+build() { (cd apps/desktop && pnpm tauri build --target "$triple" --bundles dmg,app ${updater_cfg[@]+"${updater_cfg[@]}"}); }
 build || { echo "==> bundling failed once; cleaning up and retrying"
   for v in /Volumes/dmg.*; do [ -d "$v" ] && hdiutil detach "$v" -force >/dev/null 2>&1 || true; done
   rm -f apps/desktop/src-tauri/target/"$triple"/release/bundle/macos/rw.*.dmg
@@ -46,5 +54,11 @@ codesign -dv "$app" 2>&1 | grep -E "Signature|Sealed Resources|Info.plist"
 out="dist"
 mkdir -p "$out"
 dmg="$(ls apps/desktop/src-tauri/target/"$triple"/release/bundle/dmg/*.dmg | head -n1)"
-cp "$dmg" "$out/AgentWatch_0.1.0_${label}.dmg"
-echo "wrote $out/AgentWatch_0.1.0_${label}.dmg"
+cp "$dmg" "$out/AgentWatch_${version}_${label}.dmg"
+echo "wrote $out/AgentWatch_${version}_${label}.dmg"
+upd="apps/desktop/src-tauri/target/$triple/release/bundle/macos/AgentWatch.app.tar.gz"
+if [ -f "$upd" ] && [ -f "$upd.sig" ]; then
+  cp "$upd" "$out/AgentWatch_${version}_${label}.app.tar.gz"
+  cp "$upd.sig" "$out/AgentWatch_${version}_${label}.app.tar.gz.sig"
+  echo "wrote $out/AgentWatch_${version}_${label}.app.tar.gz (+ .sig): what the in-app updater downloads"
+fi

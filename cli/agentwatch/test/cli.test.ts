@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { containsForbiddenKey } from "@agentwatch/protocol";
-import { loadConfig } from "../../../services/daemon/src/config";
+import { DAEMON_VERSION, loadConfig } from "../../../services/daemon/src/config";
 import { startDaemon, type RunningDaemon } from "../../../services/daemon/src/daemon";
 import { eventsForHook } from "../src/hook";
 import { generateHooks, isOurs, mergeHooks, readJsonFile, removeHooks, writeJsonWithBackup } from "@agentwatch/setup";
@@ -120,7 +120,7 @@ describe("end to end through real processes", () => {
 
   it("wraps a process in a PTY, preserves the exit code and records the session", async () => {
     const { stdout } = await run(process.execPath, ["--import", "tsx", MAIN, "status"], { env: env() });
-    expect(JSON.parse(stdout).version).toBe("0.1.0");
+    expect(JSON.parse(stdout).version).toBe(DAEMON_VERSION);
 
     const child = spawn(process.execPath, ["--import", "tsx", MAIN, "run", "--", "/bin/sh", "-c", "echo wrapped-output; exit 3"], { env: env(), stdio: ["pipe", "pipe", "pipe"] });
     let out = "";
