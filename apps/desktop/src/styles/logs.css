@@ -1,0 +1,12 @@
+.logs-tabs { flex: none; }
+.logs-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 6px 14px; min-height: 46px; border-bottom: 1px solid var(--border); }
+.logs-bar__title { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.log-session { font: 600 11.5px/1 var(--mono); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.log-kind { font: 500 12px/1 var(--mono); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.log-payload { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.log-payload > span:first-child { font: 400 12.5px/1.3 var(--mono); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { flex: none; font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border-strong); border-radius: 4px; padding: 3px 5px; }
+.diag-level { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.diag-where { font: 500 12px/1 var(--mono); color: var(--muted); }
+.diag-msg { font: 400 12.5px/1.5 var(--sans); min-width: 0; overflow-wrap: anywhere; }
+.tr--diag { align-items: baseline; padding-top: 10px; padding-bottom: 10px; }

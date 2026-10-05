@@ -1,0 +1,71 @@
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/* Tokens ported from the final design (design/artboards): neutral black, one white accent,
+   status colors only for status, mono micro-labels, HUD corner marks, dot-grid ground. */
+:root {
+  /* The greys. Level XX is the grey it had in the original black design; these are the values of the default theme
+     (Dusk). Other themes replace them all from src/lib/themes.ts, which must produce exactly these for Dusk. */
+  --g-00: #141519;
+  --g-05: #18191d;
+  --g-08: #1b1c1f;
+  --g-09: #1c1d20;
+  --g-0b: #1d1e22;
+  --g-0d: #1f2023;
+  --g-0e: #202124;
+  --g-10: #222226;
+  --g-11: #222327;
+  --g-13: #242528;
+  --g-14: #252629;
+  --g-16: #27272b;
+  --g-17: #27282b;
+  --g-18: #28292c;
+  --g-1a: #2a2b2e;
+  --g-20: #2f3033;
+  --g-2a: #38383b;
+  --g-30: #3d3d3f;
+  --g-3a: #454547;
+  --g-44: #4e4e4f;
+  --g-4a: #535354;
+  --g-5a: #606061;
+  --g-5f: #646465;
+  --g-6b: #6f6e6f;
+  --g-85: #858483;
+  --g-99: #969593;
+  --g-a3: #9e9d9b;
+  --g-bd: #b4b3b0;
+  --g-c8: #bdbcb9;
+  --g-ed: #dddbd7;
+  --g-f2: #e1dfdb;
+  --g-ff: #eceae5;
+
+  --bg: var(--g-05);
+  --panel: var(--g-0b);
+  --surface: var(--g-13);
+  --surface-2: var(--g-14);
+  --border: var(--g-20);
+  --border-strong: var(--g-30);
+  --select: var(--g-44);
+  --edge: var(--g-3a);
+  --text: var(--g-ed);
+  --muted: var(--g-a3);
+  --faint: var(--g-85);
+  --line: var(--g-18);
+  --bar-off: var(--g-2a);
+  --grid-dot: var(--g-1a);
+  --accent: var(--g-f2);
+  --hud: var(--g-4a);
+  /* status colours: blue = in progress, green = done / ok, amber = needs you, red = failed */
+  --run: oklch(0.76 0.13 245);
+  --done: oklch(0.80 0.12 155);
+  --ask: oklch(0.82 0.11 85);
+  --fail: oklch(0.70 0.15 22);
+  --ask-bg: color-mix(in oklab, var(--ask) 7%, var(--g-0b));
+  --fail-bg: color-mix(in oklab, var(--fail) 9%, var(--g-0b));
+  --signal: var(--g-f2);
+  --radius: 4px;
+  --radius-lg: 8px;
+  --mono: "Geist Mono Variable", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --sans: "Geist Variable", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}

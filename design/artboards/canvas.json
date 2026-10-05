@@ -1,0 +1,27 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Agents.dc.html": { "expand": "fill", "h": 1000, "is_interactive": true, "title": "Agents", "w": 1440, "x": 1520, "y": 1700 },
+    "Commands.dc.html": { "expand": "fill", "h": 1000, "is_interactive": true, "title": "Commands", "w": 1440, "x": 0, "y": 3020 },
+    "Files.dc.html": { "expand": "fill", "h": 1000, "is_interactive": true, "title": "Files", "w": 1440, "x": 3040, "y": 1700 },
+    "Logs.dc.html": { "expand": "fill", "h": 1000, "is_interactive": true, "title": "Logs", "w": 1440, "x": 1520, "y": 3020 },
+    "Main.dc.html": { "expand": "fill", "h": 1320, "is_interactive": true, "title": "Overview", "w": 1440, "x": 0, "y": 0 },
+    "MenuBar.dc.html": { "h": 640, "title": "Menu-bar monitor", "w": 380, "x": 3040, "y": 0 },
+    "Onboarding.dc.html": { "h": 640, "is_interactive": true, "title": "First launch", "w": 720, "x": 3500, "y": 0 },
+    "Session.dc.html": { "expand": "fill", "h": 1000, "title": "Session detail", "w": 1440, "x": 1520, "y": 0 },
+    "Sessions.dc.html": { "expand": "fill", "h": 1000, "is_interactive": true, "title": "Sessions", "w": 1440, "x": 0, "y": 1700 },
+    "Settings.dc.html": { "expand": "fill", "h": 1280, "is_interactive": true, "title": "Settings", "w": 1440, "x": 3040, "y": 3020 }
+  },
+  "createdOnFiles": { "at": "2026-10-04T16:55:00Z", "v": 1 },
+  "designSystems": [],
+  "launch": { "view": "canvas" },
+  "notes": {
+    "t1": { "kind": "title1", "maxW": 4220, "text": "AgentWatch: overview, session, menu bar, first launch", "w": 240, "x": 0, "y": -260 },
+    "t2": { "kind": "title1", "maxW": 4480, "text": "Menus: sessions, agents, files", "w": 240, "x": 0, "y": 1440 },
+    "t3": { "kind": "title1", "maxW": 4480, "text": "Menus: commands, logs, settings", "w": 240, "x": 0, "y": 2760 }
+  },
+  "order": ["Main.dc.html", "Session.dc.html", "MenuBar.dc.html", "Onboarding.dc.html", "Sessions.dc.html", "Agents.dc.html", "Files.dc.html", "Commands.dc.html", "Logs.dc.html", "Settings.dc.html"],
+  "pages": [],
+  "title": "AgentWatch UI"
+}

@@ -1,0 +1,14 @@
+{"method":"thread/started","params":{"thread":{"id":"thr_main","cwd":"/Users/dev/work/billing-web","model":"gpt-5-codex"}}}
+{"method":"turn/started","params":{"threadId":"thr_main","turn":{"id":"t1","status":"inProgress"}}}
+{"method":"item/started","params":{"threadId":"thr_main","turnId":"t1","item":{"id":"i1","type":"userMessage","content":"SENTINEL_PROMPT"}}}
+{"method":"item/started","params":{"threadId":"thr_main","turnId":"t1","item":{"id":"i2","type":"commandExecution","command":"pnpm test invoice","cwd":"/Users/dev/work/billing-web","status":"inProgress"}}}
+{"method":"item/commandExecution/outputDelta","params":{"threadId":"thr_main","turnId":"t1","itemId":"i2","delta":"SENTINEL_OUTPUT"}}
+{"method":"item/completed","params":{"threadId":"thr_main","turnId":"t1","item":{"id":"i2","type":"commandExecution","command":"pnpm test invoice","status":"completed","exitCode":0,"durationMs":6100,"aggregatedOutput":"SENTINEL_OUTPUT"}}}
+{"method":"item/completed","params":{"threadId":"thr_main","turnId":"t1","item":{"id":"i3","type":"fileChange","status":"completed","changes":[{"path":"src/invoice/totals.ts","kind":"update","diff":"--- a\n+++ b\n@@\n-SENTINEL_OLD\n+SENTINEL_NEW\n+two\n"},{"path":"src/invoice/old.ts","kind":"delete","diff":"-gone\n"}]}}}
+{"method":"item/started","params":{"threadId":"thr_main","turnId":"t1","item":{"id":"i4","type":"collabAgentToolCall","tool":"spawn_agent","status":"inProgress","senderThreadId":"thr_main","receiverThreadIds":["thr_child"],"prompt":"SENTINEL_PROMPT"}}}
+{"method":"item/completed","params":{"threadId":"thr_child","turnId":"t9","item":{"id":"c1","type":"mcpToolCall","server":"fs","tool":"read","status":"completed","durationMs":12,"result":"SENTINEL_RESULT"}}}
+{"method":"item/commandExecution/requestApproval","id":7,"params":{"threadId":"thr_main","turnId":"t1","itemId":"i5","approvalId":"appr_1","command":"rm -rf dist && pnpm build","cwd":"/Users/dev/work/billing-web"}}
+{"method":"thread/status/changed","params":{"threadId":"thr_main","status":{"type":"active","activeFlags":["waitingOnApproval"]}}}
+{"method":"serverRequest/resolved","params":{"threadId":"thr_main","requestId":"appr_1"}}
+{"method":"thread/tokenUsage/updated","params":{"threadId":"thr_main","turnId":"t1","tokenUsage":{"total":{"totalTokens":61400,"inputTokens":48200,"cachedInputTokens":31000,"outputTokens":13200,"reasoningOutputTokens":4100},"last":{"inputTokens":100}}}}
+{"method":"turn/completed","params":{"threadId":"thr_main","turn":{"id":"t1","status":"completed"}}}

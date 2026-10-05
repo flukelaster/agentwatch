@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch Overview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1320px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column">
+
+<header style="min-height: 48px; box-sizing: border-box; padding: 8px 16px; border-bottom: 1px solid #202020; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid #202020; border-radius: 999px; font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>3 running</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid oklch(0.82 0.11 85); border-radius: 999px; color: oklch(0.82 0.11 85); font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="font-weight: 700">!</span>1 needs you</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #858585"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>127.0.0.1 · local only</span>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1">
+
+<nav aria-label="Primary" style="flex: 0 0 208px; box-sizing: border-box; padding: 12px; border-right: 1px solid #202020; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+<a href="{{n.href}}" style="{{n.style}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"/></svg><span>{{n.label}}</span></a>
+</sc-for>
+<div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>agentwatchd connected</span>
+<span>Prompts and transcripts are not stored. History kept 14 days.</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 22px 22px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Session" style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; justify-content: space-between; gap: 12px 24px">
+<div role="group" aria-label="Choose a session" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{sessions}}" as="s" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{s.selected}}" onClick="{{s.pick}}" style="{{s.style}}">
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="{{s.dotStyle}}"></span>
+<span style="font: 600 14px/1.2 Geist, system-ui, sans-serif">{{s.repo}}</span>
+</span>
+<span style="{{s.statusStyle}}">{{s.status}}</span>
+</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px 36px; align-items: center">
+<sc-for list="{{stats}}" as="st" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #858585">{{st.l}}</span>
+<span style="font: 500 16px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: -0.01em">{{st.v}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="font: 400 12px/1.5 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{meta}}</div>
+</section>
+
+<section aria-label="Agent graph" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 8px 14px; min-height: 48px; box-sizing: border-box; border-bottom: 1px solid #202020">
+<div style="display: flex; align-items: center; gap: 12px">
+<span style="font: 600 12px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase">Agent graph</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3"><span style="{{liveDot}}"></span>{{liveText}}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px">
+<div role="group" aria-label="Flow style" style="display: flex; align-items: center; gap: 10px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #858585">Flow</span>
+<div style="display: flex; border: 1px solid #303030; border-radius: 4px; overflow: hidden">
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{m.on}}" onClick="{{m.pick}}" style="{{m.style}}">{{m.label}}</button>
+</sc-for>
+</div>
+</div>
+<button type="button" onClick="{{togglePlay}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 14px; border: 1px solid #303030; border-radius: 4px; background: transparent; color: #ededed; cursor: pointer; font: 500 12px/1 Geist, system-ui, sans-serif">
+<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="{{playIcon}}"/></svg>{{playLabel}}
+</button>
+</div>
+</div>
+<div style="overflow-x: auto; padding: 24px 16px 28px">
+<div role="img" aria-label="{{stage.label}}" style="{{stage.style}}">
+<sc-for list="{{lines}}" as="l" hint-placeholder-count="20">
+<div style="{{l.style}}"></div>
+</sc-for>
+<sc-for list="{{arrows}}" as="a" hint-placeholder-count="8">
+<div style="{{a.style}}"></div>
+</sc-for>
+<sc-for list="{{pulses}}" as="p" hint-placeholder-count="10">
+<div style="{{p.style}}"></div>
+</sc-for>
+<sc-for list="{{nodes}}" as="nd" hint-placeholder-count="8">
+<div style="{{nd.style}}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+<span style="font: 600 13px/1.2 'Geist Mono', ui-monospace, monospace">{{nd.title}}</span>
+<span style="font: 400 11px/1.2 'Geist Mono', ui-monospace, monospace; color: #858585">{{nd.tag}}</span>
+</div>
+<span style="{{nd.stateStyle}}">{{nd.state}}</span>
+<span style="font: 400 11.5px/1.4 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{nd.detail}}</span>
+<sc-if value="{{nd.hasBars}}" hint-placeholder-val="{{ false }}">
+<span style="display: flex; align-items: center; gap: 8px; margin-top: auto">
+<span style="display: flex; gap: 2px"><sc-for list="{{nd.bars}}" as="b" hint-placeholder-count="3"><span style="{{b.style}}"></span></sc-for></span>
+<span style="font: 500 11px/1 Geist, system-ui, sans-serif; color: #a3a3a3">{{nd.conf}}</span>
+</span>
+</sc-if>
+</div>
+</sc-for>
+<sc-for list="{{labels}}" as="b" hint-placeholder-count="1">
+<div style="{{b.style}}">{{b.text}}</div>
+</sc-for>
+</div>
+</div>
+<div style="padding: 10px 14px; border-top: 1px solid #202020; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">{{legend}}</div>
+</section>
+
+<section aria-label="Session log" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 6px 14px; min-height: 48px; box-sizing: border-box; border-bottom: 1px solid #202020">
+<span style="font: 600 12px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase">Session log</span>
+<button type="button" aria-pressed="{{highOnly}}" onClick="{{toggleHigh}}" style="{{highBtnStyle}}">
+<span style="{{highBoxStyle}}"></span>High confidence only
+</button>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 760px">
+<div style="display: grid; grid-template-columns: 84px 104px 60px minmax(0, 1fr) 128px 150px; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #181818; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #858585">
+<span>Time</span><span>Agent</span><span>Kind</span><span>Detail</span><span>Confidence</span><span>Source</span>
+</div>
+<div style="min-height: 300px">
+<sc-for list="{{timeline}}" as="e" hint-placeholder-count="8">
+<div style="{{e.rowStyle}}">
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{e.t}}</span>
+<span style="{{e.agentStyle}}">{{e.agent}}</span>
+<span style="{{e.kindStyle}}">{{e.kind}}</span>
+<span style="font: 400 12.5px/1.3 'Geist Mono', ui-monospace, monospace; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{e.text}}</span>
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="display: flex; gap: 2px"><sc-for list="{{e.bars}}" as="b" hint-placeholder-count="3"><span style="{{b.style}}"></span></sc-for></span>
+<span style="font: 500 11px/1 Geist, system-ui, sans-serif; color: #a3a3a3">{{e.conf}}</span>
+</span>
+<span style="font: 400 11.5px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{e.src}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="padding: 10px 14px; border-top: 1px solid #202020; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">High is a provider hook or API, Med is the process tree, and Low is filesystem, Git or terminal text. AgentWatch shows what is known and does not guess intent.</div>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+  state = { sel: 's1', highOnly: false, t: 0, playing: true, mode: 'event' };
+
+  componentDidMount() {
+    try {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.setState({ playing: false });
+    } catch (e) { /* motion preference unavailable */ }
+    this.timer = setInterval(() => {
+      if (this.state.playing) this.setState({ t: this.state.t + 0.05 });
+    }, 50);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  renderVals() {
+    const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const SIG = '#f2f2f2';
+    const FAIL = 'oklch(0.70 0.15 22)';
+    const ASK = 'oklch(0.82 0.11 85)';
+    const RUN = 'oklch(0.80 0.12 155)';
+    const GRAY = { claude: '#ededed', codex: '#c8c8c8', generic: '#999999' };
+    const ST = { run: RUN, ask: ASK, fail: FAIL, idle: '#a3a3a3', done: '#a3a3a3' };
+    const HREFS = ['Main.dc.html', 'Sessions.dc.html', 'Agents.dc.html', 'Files.dc.html', 'Commands.dc.html', 'Logs.dc.html', 'Settings.dc.html'];
+    const t = this.state.t;
+    const mode = this.state.mode;
+
+    const nav = [
+      ['Overview', 'M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z'],
+      ['Sessions', 'M2.5 4h11M2.5 8h11M2.5 12h11'],
+      ['Agents', 'M8 3v4M3.5 13V10.5h9V13M8 7v3.5M6 3h4'],
+      ['Files', 'M4 2.5h5l3 3V13.5H4zM9 2.5v3h3'],
+      ['Commands', 'M3 4.5l3.5 3.5L3 11.5M8 12h5'],
+      ['Logs', 'M3 3.5h10M3 6.5h7M3 9.5h10M3 12.5h5'],
+      ['Settings', 'M3 5h6M11 5h2M3 11h2M7 11h6M9 3v4M5 9v4'],
+    ].map(([label, d], i) => ({
+      label, d, href: HREFS[i],
+      style: `display:flex;align-items:center;gap:10px;min-height:36px;box-sizing:border-box;padding:0 10px;border-radius:4px;text-decoration:none;font:${i === 0 ? 600 : 500} 13px/1 Geist,system-ui,sans-serif;color:${i === 0 ? '#f2f2f2' : '#a3a3a3'};background:${i === 0 ? '#131313' : 'transparent'}`,
+    }));
+
+    const DATA = {
+      s1: {
+        id: 's1', pk: 'claude', repo: 'auth-service', status: 'Running tests', st: 'run', elapsed: '03:42',
+        model: 'claude-sonnet-5-5', cwd: '~/work/auth-service', branch: 'fix/session-fk', src: 'claude-hook',
+        tokens: 'not reported', files: '12', diff: '+142 −38', seq: 481,
+        sources: [
+          { name: 'claude-hook', desc: 'provider hooks', conf: 'high' },
+          { name: 'process', desc: 'process tree sampler', conf: 'medium' },
+          { name: 'filesystem', desc: 'watcher and git', conf: 'low' },
+        ],
+        main: { title: 'main', tag: 'claude-sonnet-5-5', state: '● editing', st: 'run', detail: 'src/auth/session.ts · 41 tools' },
+        kids: [
+          { title: 'explorer', tag: 'explore', state: '✓ done', st: 'done', detail: '14 tools · 00:42' },
+          { title: 'worker', tag: 'worker', state: '✕ failed', st: 'fail', detail: 'pnpm test · exit 1 · FK constraint' },
+          { title: 'researcher', tag: 'research', state: '● reading', st: 'run', detail: 'docs/migrations.md' },
+        ],
+        events: [
+          ['23:34:10', 'explorer', 'Read', 'src/auth/session.ts', 'high', 'claude-hook'],
+          ['23:34:12', 'main', 'Edit', 'src/auth/session.ts  +21 −4', 'high', 'claude-hook'],
+          ['23:34:14', 'unknown', 'File', 'src/auth/session.test.ts changed', 'low', 'filesystem'],
+          ['23:34:15', 'worker', 'Run', 'pnpm test', 'high', 'claude-hook'],
+          ['23:34:16', 'worker', 'Run', 'vitest run  (child process)', 'medium', 'process'],
+          ['23:34:19', 'worker', 'Fail', 'FK constraint · exit 1 · 3.8s', 'high', 'claude-hook'],
+          ['23:34:21', 'researcher', 'Read', 'docs/migrations.md', 'high', 'claude-hook'],
+          ['23:34:24', 'main', 'Edit', 'src/auth/session.ts  +9 −2', 'high', 'claude-hook'],
+        ],
+      },
+      s2: {
+        id: 's2', pk: 'codex', repo: 'billing-web', status: 'Needs you', st: 'ask', elapsed: '12:08',
+        model: 'gpt-5-codex', cwd: '~/work/billing-web', branch: 'feat/invoice-totals', src: 'codex-app-server',
+        tokens: '61.4k reported', files: '2 edited', diff: '+64 −9', seq: 474,
+        sources: [
+          { name: 'codex-app-server', desc: 'structured events', conf: 'high' },
+          { name: 'process', desc: 'process tree sampler', conf: 'medium' },
+          { name: 'git', desc: 'status and numstat', conf: 'low' },
+        ],
+        main: { title: 'main', tag: 'gpt-5-codex', state: '! needs approval', st: 'ask', detail: 'rm -rf dist && pnpm build' },
+        kids: [
+          { title: 'reviewer', tag: 'review', state: '● reading', st: 'run', detail: 'src/invoice/format.ts' },
+        ],
+        events: [
+          ['23:21:02', 'main', 'Edit', 'src/invoice/totals.ts  +38 −5', 'high', 'codex-app-server'],
+          ['23:21:05', 'main', 'Edit', 'src/invoice/totals.test.ts  +26 −4', 'high', 'codex-app-server'],
+          ['23:21:09', 'reviewer', 'Read', 'src/invoice/format.ts', 'high', 'codex-hook'],
+          ['23:21:14', 'main', 'Run', 'pnpm test invoice · exit 0 · 6.1s', 'high', 'codex-app-server'],
+          ['23:21:22', 'main', 'Ask', 'run rm -rf dist && pnpm build', 'high', 'codex-app-server'],
+        ],
+      },
+      s3: {
+        id: 's3', pk: 'generic', repo: 'notes-cli', status: 'Idle', st: 'idle', elapsed: '41:15',
+        model: 'unknown', cwd: '~/work/notes-cli', branch: 'main', src: 'pty · filesystem',
+        tokens: 'unavailable', files: '1 observed', diff: '+3 −1', seq: 470,
+        sources: [
+          { name: 'pty', desc: 'terminal bytes', conf: 'low' },
+          { name: 'process', desc: 'process tree sampler', conf: 'medium' },
+          { name: 'filesystem', desc: 'watcher', conf: 'low' },
+        ],
+        main: { title: 'custom-agent', tag: 'wrapped', state: '○ idle', st: 'idle', detail: 'no subagent data for a generic CLI' },
+        kids: [],
+        events: [
+          ['23:02:40', 'unknown', 'Log', 'terminal output: "compiling…"', 'low', 'pty'],
+          ['23:02:44', 'unknown', 'File', 'src/index.ts changed', 'low', 'filesystem'],
+          ['23:02:44', 'unknown', 'Run', 'git status  (child of wrapper)', 'medium', 'process'],
+          ['23:03:10', 'unknown', 'Log', 'no output for 2m', 'low', 'pty'],
+        ],
+      },
+    };
+
+    const cur = DATA[this.state.sel];
+    const n = cur.kids.length;
+    const playing = this.state.playing;
+
+    // ---- session strip
+    const sessions = ['s1', 's2', 's3'].map((id) => {
+      const s = DATA[id];
+      const sel = id === this.state.sel;
+      return {
+        repo: s.repo, status: s.status, selected: sel,
+        pick: () => this.setState({ sel: id, t: 0 }),
+        style: `display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:168px;min-height:56px;box-sizing:border-box;padding:10px 14px;text-align:left;cursor:pointer;border-radius:4px;border:1px solid ${sel ? '#4a4a4a' : '#202020'};background:${sel ? '#131313' : 'transparent'};color:#ededed`,
+        dotStyle: `width:8px;height:8px;border-radius:50%;background:${GRAY[s.pk]}`,
+        statusStyle: `font:500 12px/1 Geist,system-ui,sans-serif;color:${ST[s.st]}`,
+      };
+    });
+
+    const toS = (s) => { const p = s.split(':').map(Number); return p[0] * 60 + p[1]; };
+    const fmt = (v) => String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(v % 60).padStart(2, '0');
+    const stats = [
+      { l: 'Elapsed', v: fmt(toS(cur.elapsed) + Math.floor(t)) },
+      { l: 'Tokens', v: cur.tokens },
+      { l: 'Files', v: cur.files },
+      { l: 'Diff', v: cur.diff },
+    ];
+    const meta = [cur.model, cur.cwd, cur.branch, cur.src].join('  ·  ');
+
+    // ---- log reveal drives which agent is "active"
+    const STEP = 1.6;
+    const evs = cur.events;
+    const cycleLen = (evs.length + 2) * STEP;
+    const tc = t % cycleLen;
+    const idx = Math.floor(tc / STEP);
+    const visible = Math.min(idx + 1, evs.length);
+    const latest = evs[visible - 1];
+    const eventCount = cur.seq + Math.floor(t / STEP);
+
+    // ---- graph geometry
+    const cx = 655;
+    const SW = 1090;
+    const SH = n ? 600 : 400;
+    const nodes = [];
+    const edges = [];
+    const KW = 230, GAP = 20, KH = 130;
+    const total = n * KW + (n - 1) * GAP;
+    const startX = cx - total / 2;
+    const kidCx = (i) => startX + i * (KW + GAP) + KW / 2;
+
+    const mainY = n ? 16 : 140;
+    nodes.push({ id: 'main', agent: cur.main.title === 'custom-agent' ? 'unknown' : 'main', x: 455, y: mainY, w: 400, h: 100, ...cur.main });
+
+    const srcPos = n
+      ? [{ y: 12, h: 108 }, { y: 290, h: 130 }, { y: 488, h: 104 }]
+      : [{ y: 12, h: 108 }, { y: 136, h: 108 }, { y: 260, h: 108 }];
+    cur.sources.forEach((s, i) => {
+      nodes.push({ id: 'src' + i, source: true, x: 0, y: srcPos[i].y, w: 210, h: srcPos[i].h, title: s.name, tag: '', state: s.desc, st: 'src', detail: 'events ' + (eventCount + i * 3), conf: s.conf });
+    });
+
+    if (n) {
+      cur.kids.forEach((k, i) => {
+        nodes.push({ id: 'kid' + i, agent: k.title, x: startX + i * (KW + GAP), y: 290, w: KW, h: KH, ...k });
+      });
+      const done = cur.kids.filter((k) => k.st === 'done').length;
+      const failed = cur.kids.filter((k) => k.st === 'fail').length;
+      nodes.push({ id: 'merge', x: cx - 150, y: 500, w: 300, h: 80, title: 'back to main', tag: '', state: `${done + failed} of ${n} reported`, st: failed ? 'fail' : 'run', detail: failed ? `${failed} failed · main decides next step` : 'main reviews and continues' });
+      edges.push({ key: 'src0', pts: [[210, 66], [455, 66]], to: 'main', speed: 120, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[0].conf });
+      edges.push({ key: 'src1', pts: [[210, 355], [startX, 355]], to: 'kid0', speed: 70, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[1].conf });
+      edges.push({ key: 'src2', pts: [[210, 540], [cx - 150, 540]], to: 'merge', speed: 110, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[2].conf });
+      cur.kids.forEach((k, i) => {
+        const kx = kidCx(i);
+        edges.push({ key: 'dlg' + i, pts: [[cx, 116], [cx, 230], [kx, 230], [kx, 290]], to: 'kid' + i, speed: 150, color: SIG, dashed: false, line: '#303030', conf: 'high' });
+        edges.push({ key: 'ret' + i, pts: [[kx, 420], [kx, 460], [cx, 460], [cx, 500]], to: 'merge', speed: 120, color: k.st === 'fail' ? FAIL : SIG, dashed: false, line: '#303030', conf: 'high', off: 0.3 });
+      });
+      edges.push({ key: 'loop', pts: [[cx + 150, 540], [1062, 540], [1062, 66], [855, 66]], to: 'main', speed: 140, color: SIG, dashed: true, line: '#3a3a3a', conf: 'high' });
+    } else {
+      edges.push({ key: 'src0', pts: [[210, 66], [332, 66], [332, 190], [455, 190]], to: 'main', speed: 90, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[0].conf });
+      edges.push({ key: 'src1', pts: [[210, 190], [455, 190]], to: 'main', speed: 90, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[1].conf });
+      edges.push({ key: 'src2', pts: [[210, 314], [332, 314], [332, 190], [455, 190]], to: 'main', speed: 90, color: SIG, dashed: true, line: '#3a3a3a', conf: cur.sources[2].conf });
+    }
+
+    const segLen = (a, b) => Math.abs(b[0] - a[0]) + Math.abs(b[1] - a[1]);
+    const polyLen = (pts) => pts.reduce((s, p, i) => (i ? s + segLen(pts[i - 1], p) : 0), 0);
+    const polyAt = (pts, d) => {
+      let rem = d;
+      for (let i = 1; i < pts.length; i++) {
+        const L = segLen(pts[i - 1], pts[i]);
+        if (rem <= L || i === pts.length - 1) {
+          const r = L ? Math.min(1, rem / L) : 0;
+          return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * r, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * r];
+        }
+        rem -= L;
+      }
+      return pts[0];
+    };
+
+    // soft streak: a short gradient bar clipped onto each segment it overlaps
+    const mix = (c, a) => `color-mix(in oklch, ${c} ${Math.round(Math.max(0, Math.min(1, a)) * 100)}%, transparent)`;
+    const streak = (pts, head, L, alpha, color, out) => {
+      const a = head - L, b = head;
+      let s0 = 0;
+      for (let i = 1; i < pts.length; i++) {
+        const p = pts[i - 1], q = pts[i];
+        const sl = segLen(p, q);
+        const s1 = s0 + sl;
+        if (sl) {
+          const lo = Math.max(a, s0), hi = Math.min(b, s1);
+          if (hi > lo) {
+            const dx = Math.sign(q[0] - p[0]), dy = Math.sign(q[1] - p[1]);
+            const x0 = p[0] + dx * (lo - s0), y0 = p[1] + dy * (lo - s0);
+            const x1 = p[0] + dx * (hi - s0), y1 = p[1] + dy * (hi - s0);
+            const horiz = dy === 0;
+            const dir = horiz ? (dx > 0 ? 'to right' : 'to left') : (dy > 0 ? 'to bottom' : 'to top');
+            const pa = ((lo - a) / L) * alpha, pb = ((hi - a) / L) * alpha;
+            out.push({ style: `position:absolute;left:${(horiz ? Math.min(x0, x1) : x0 - 1).toFixed(1)}px;top:${(horiz ? y0 - 1 : Math.min(y0, y1)).toFixed(1)}px;width:${horiz ? (hi - lo).toFixed(1) : 2}px;height:${horiz ? 2 : (hi - lo).toFixed(1)}px;border-radius:2px;background:linear-gradient(${dir}, ${mix(color, pa)}, ${mix(color, pb)})` });
+          }
+        }
+        s0 = s1;
+      }
+    };
+
+    // ---- which edges an event touches, and how long ago it fired (event + glow modes)
+    const ageOf = {};
+    if (mode === 'event' || mode === 'glow') {
+      evs.forEach((ev, j) => {
+        const age = tc - j * STEP;
+        if (age < 0 || age > 2.4) return;
+        const keys = [];
+        const si = cur.sources.findIndex((s) => s.name === ev[5] || (s.name === 'codex-app-server' && ev[5] === 'codex-hook'));
+        if (si > -1) keys.push('src' + si);
+        const ki = cur.kids.findIndex((k) => k.title === ev[1]);
+        if (ki > -1) {
+          keys.push('ret' + ki);
+          if (evs.findIndex((x) => x[1] === ev[1]) === j) keys.push('dlg' + ki);
+        }
+        keys.forEach((key) => { ageOf[key] = ageOf[key] === undefined ? age : Math.min(ageOf[key], age); });
+      });
+    }
+
+    const lines = [];
+    const arrows = [];
+    const pulses = [];
+    const heat = {};
+    const confA = { high: 1, medium: 0.7, low: 0.45 };
+    const TRAVEL = 0.9;
+
+    edges.forEach((e, ei) => {
+      const age = ageOf[e.key];
+      const lit = age === undefined ? 0 : Math.max(0, 1 - age / 2.4);
+      const lc = lit > 0 ? `color-mix(in oklch, ${SIG} ${Math.round(lit * 70)}%, ${e.line})` : e.line;
+      for (let i = 1; i < e.pts.length; i++) {
+        const a = e.pts[i - 1], b = e.pts[i];
+        if (!segLen(a, b)) continue;
+        const bd = `1px ${e.dashed ? 'dashed' : 'solid'} ${lc}`;
+        lines.push({ style: a[1] === b[1]
+          ? `position:absolute;left:${Math.min(a[0], b[0])}px;top:${a[1]}px;width:${Math.abs(b[0] - a[0])}px;height:0;border-top:${bd}`
+          : `position:absolute;left:${a[0]}px;top:${Math.min(a[1], b[1])}px;width:0;height:${Math.abs(b[1] - a[1])}px;border-left:${bd}` });
+      }
+      let li = e.pts.length - 1;
+      while (li > 0 && !segLen(e.pts[li - 1], e.pts[li])) li--;
+      const p0 = e.pts[li - 1], p1 = e.pts[li];
+      const dx = Math.sign(p1[0] - p0[0]), dy = Math.sign(p1[1] - p0[1]);
+      let st;
+      if (dy > 0) st = `left:${p1[0] - 4}px;top:${p1[1] - 7}px;border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid ${lc}`;
+      else if (dy < 0) st = `left:${p1[0] - 4}px;top:${p1[1]}px;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:7px solid ${lc}`;
+      else if (dx > 0) st = `left:${p1[0] - 7}px;top:${p1[1] - 4}px;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:7px solid ${lc}`;
+      else st = `left:${p1[0]}px;top:${p1[1] - 4}px;border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:7px solid ${lc}`;
+      arrows.push({ style: `position:absolute;width:0;height:0;${st}` });
+
+      const len = polyLen(e.pts);
+      const cf = confA[e.conf] || 1;
+
+      if (mode === 'event' && age !== undefined) {
+        if (age < TRAVEL) {
+          const f = age / TRAVEL;
+          const eased = 1 - (1 - f) * (1 - f);
+          const a = Math.min(1, f / 0.12, (1 - f) / 0.2 + 0.0) * cf;
+          streak(e.pts, eased * len, 56, Math.max(0.15, a), e.color, pulses);
+        } else if (age < TRAVEL + 0.8) {
+          heat[e.to] = Math.max(heat[e.to] || 0, 1 - (age - TRAVEL) / 0.8);
+        }
+      }
+
+      if (mode === 'sweep') {
+        const off = e.off !== undefined ? e.off : (ei * 0.37) % 1;
+        const f = (((t * e.speed / len) + off) % 1 + 1) % 1;
+        const a = Math.min(1, f / 0.06, (1 - f) / 0.06) * cf;
+        streak(e.pts, f * len, 64, a, e.color, pulses);
+        const since = f * len / e.speed;
+        if (since < 0.8) heat[e.to] = Math.max(heat[e.to] || 0, 1 - since / 0.8);
+      }
+
+      if (mode === 'dots') {
+        const nP = Math.max(1, Math.round(len / 240));
+        const off = e.off !== undefined ? e.off : (ei * 0.37) % 1;
+        for (let k = 0; k < nP; k++) {
+          const f = (((t * e.speed / len) + off + k / nP) % 1 + 1) % 1;
+          const fade = Math.min(1, f / 0.05, (1 - f) / 0.05) * cf;
+          const since = f * len / e.speed;
+          if (since < 0.8) heat[e.to] = Math.max(heat[e.to] || 0, 1 - since / 0.8);
+          [[0, 8, 1], [11, 6, 0.55], [21, 4, 0.3]].forEach(([back, size, al]) => {
+            const d = f * len - back;
+            if (d < 0) return;
+            const q = polyAt(e.pts, d);
+            pulses.push({ style: `position:absolute;left:${(q[0] - size / 2).toFixed(1)}px;top:${(q[1] - size / 2).toFixed(1)}px;width:${size}px;height:${size}px;border-radius:50%;background:${e.color};opacity:${(fade * al).toFixed(2)};box-shadow:0 0 ${size + 4}px ${e.color}` });
+          });
+        }
+      }
+    });
+
+    // ---- which node is "active" because of the newest log line
+    let activeId = null;
+    if (latest) {
+      const found = nodes.find((nd) => nd.agent && nd.agent === latest[1]);
+      activeId = found ? found.id : (latest[1] === 'unknown' && !n ? 'main' : null);
+    }
+
+    const BORDER = { run: '#6b6b6b', ask: ASK, fail: FAIL, idle: '#303030', done: '#303030', src: '#2a2a2a' };
+    const confN = { high: 3, medium: 2, low: 1 };
+    const confL = { high: 'High', medium: 'Med', low: 'Low' };
+    const nodeList = nodes.map((nd) => {
+      const glow = Math.max(heat[nd.id] || 0, nd.id === activeId ? 1 : 0);
+      const border = nd.id === activeId ? '#f2f2f2' : nd.id === 'main' && nd.st === 'run' ? '#f2f2f2' : BORDER[nd.st] || '#303030';
+      return {
+        title: nd.title, tag: nd.tag, state: nd.state, detail: nd.detail,
+        hasBars: !!nd.source, conf: nd.source ? confL[nd.conf] + ' confidence' : '',
+        bars: nd.source ? [0, 1, 2].map((i) => ({ style: `width:10px;height:6px;border-radius:1px;background:${i < confN[nd.conf] ? '#f2f2f2' : '#2a2a2a'}` })) : [],
+        style: `position:absolute;left:${nd.x}px;top:${nd.y}px;width:${nd.w}px;height:${nd.h}px;box-sizing:border-box;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:#0b0b0b;border:1px solid ${border};border-radius:4px;box-shadow:0 0 ${Math.round(glow * 22)}px color-mix(in oklch, ${SIG} ${Math.round(glow * 55)}%, transparent)`,
+        stateStyle: nd.source ? `font:400 12px/1.3 Geist,system-ui,sans-serif;color:#a3a3a3` : `font:500 12.5px/1.3 ${MONO};color:${ST[nd.st] || '#a3a3a3'}`,
+      };
+    });
+
+    const labels = n ? [{ text: `delegate · ${n} subagent${n > 1 ? 's' : ''}`, style: `position:absolute;left:${cx - 90}px;top:158px;width:180px;text-align:center;padding:3px 0;background:#0b0b0b;font:400 12px/1.2 ${MONO};color:#a3a3a3` }] : [];
+
+    const stage = {
+      style: `position:relative;width:${SW}px;height:${SH}px;margin:0 auto`,
+      label: `Agent graph for ${cur.repo}: ${cur.main.title} ${cur.main.state.replace(/^\S+ /, '')}` + (n ? `, delegating to ${cur.kids.map((k) => k.title + ' (' + k.state.replace(/^\S+ /, '') + ')').join(', ')}` : ', no subagents visible'),
+    };
+
+    // ---- session log (streams in over time)
+    const rows = evs.slice(0, visible).map((e, i) => ({ e, newest: i === visible - 1 }));
+    const kc = { Fail: FAIL, Ask: ASK };
+    const timeline = rows
+      .filter((r) => !this.state.highOnly || r.e[4] === 'high')
+      .map((r) => {
+        const [tm, agent, kind, text, conf, src] = r.e;
+        return {
+          t: tm, agent, kind, text, src, conf: confL[conf],
+          rowStyle: `display:grid;grid-template-columns:84px 104px 60px minmax(0,1fr) 128px 150px;gap:12px;align-items:center;min-height:36px;box-sizing:border-box;padding:0 14px;border-bottom:1px solid #181818;background:${kind === 'Fail' ? '#1a1010' : kind === 'Ask' ? '#15140c' : r.newest ? '#141414' : 'transparent'}`,
+          agentStyle: `font:500 12px/1 ${MONO};color:${agent === 'unknown' ? '#858585' : '#ededed'}`,
+          kindStyle: `font:500 12px/1 Geist,system-ui,sans-serif;color:${kc[kind] || '#a3a3a3'}`,
+          bars: [0, 1, 2].map((i) => ({ style: `width:10px;height:6px;border-radius:1px;background:${i < confN[conf] ? '#f2f2f2' : '#2a2a2a'}` })),
+        };
+      });
+
+    const modes = [['event', 'Per event'], ['sweep', 'Sweep'], ['dots', 'Dots'], ['glow', 'Glow']].map(([k, label], i) => {
+      const on = mode === k;
+      return {
+        label, on, pick: () => this.setState({ mode: k }),
+        style: `min-height:32px;padding:0 12px;border:0;border-left:${i ? '1px solid #303030' : '0'};cursor:pointer;background:${on ? '#f2f2f2' : 'transparent'};color:${on ? '#050505' : '#a3a3a3'};font:500 12px/1 Geist,system-ui,sans-serif`,
+      };
+    });
+    const legendBy = {
+      event: 'Nothing moves until something happens. Each event lights its source line and sends one soft streak along it.',
+      sweep: 'A soft streak travels each line all the time. Dimmer means lower confidence.',
+      dots: 'Each moving dot is one event. Dimmer dots mean lower confidence.',
+      glow: 'Lines brighten when they carry a recent event, then fade back. Nothing moves.',
+    };
+
+    const on = this.state.highOnly;
+    return {
+      nav, sessions, stats, meta, stage, lines, arrows, labels, pulses, nodes: nodeList, timeline, modes,
+      legend: legendBy[mode] + ' Dashed lines are observed sources and solid lines are delegation and results.',
+      liveDot: `width:8px;height:8px;border-radius:50%;background:${playing ? RUN : '#858585'}`,
+      liveText: playing ? 'streaming events' : 'paused',
+      playLabel: playing ? 'Pause' : 'Play',
+      playIcon: playing ? 'M2 1h3v10H2zM7 1h3v10H7z' : 'M2.5 1.2 10.5 6l-8 4.8z',
+      togglePlay: () => this.setState({ playing: !playing }),
+      highOnly: on,
+      toggleHigh: () => this.setState({ highOnly: !on }),
+      highBtnStyle: `display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 12px;border-radius:4px;cursor:pointer;border:1px solid ${on ? '#4a4a4a' : '#202020'};background:${on ? '#131313' : 'transparent'};color:${on ? '#ededed' : '#a3a3a3'};font:500 12px/1 Geist,system-ui,sans-serif`,
+      highBoxStyle: `width:12px;height:12px;box-sizing:border-box;border-radius:3px;border:1px solid ${on ? '#f2f2f2' : '#858585'};background:${on ? '#f2f2f2' : 'transparent'}`,
+    };
+  }
+}
+</script>
+</body>
+</html>

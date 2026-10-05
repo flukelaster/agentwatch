@@ -1,0 +1,11 @@
+.fl-path { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.fl-path__text { font: 500 12.5px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fl-tag { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ask); }
+.fl-session { font: 600 11.5px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fl-op { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.fl-delta { font: 500 12px/1 var(--mono); }
+.fl-who { font: 500 12px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fl-who--none { color: var(--faint); }
+.fl-evid { display: flex; flex-direction: column; gap: 6px; }
+.fl-src { font: 400 11px/1 var(--mono); color: var(--muted); }
+.fl-last { font: 400 12px/1 var(--mono); color: var(--muted); }

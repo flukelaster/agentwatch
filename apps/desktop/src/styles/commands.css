@@ -1,0 +1,10 @@
+.cm-cmd { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.cm-cmd__text { font: 500 12.5px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-tag { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.cm-agent { font: 500 12px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-agent--none { color: var(--faint); }
+.cm-session { font: 600 11.5px/1.2 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cm-time { font: 400 12px/1 var(--mono); color: var(--muted); }
+.cm-result { font: 600 11.5px/1.2 var(--mono); }
+.cm-evid { display: flex; flex-direction: column; gap: 6px; }
+.cm-src { font: 400 11px/1 var(--mono); color: var(--muted); }

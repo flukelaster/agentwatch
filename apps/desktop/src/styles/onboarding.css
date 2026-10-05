@@ -1,0 +1,23 @@
+.ob { width: min(720px, 100%); min-height: 640px; margin: 0 auto; box-sizing: border-box; background: var(--panel); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; }
+.ob__head { padding: 32px 36px 20px; display: flex; flex-direction: column; gap: 16px; }
+.ob__brand { display: flex; align-items: center; gap: 10px; }
+.ob h1 { margin: 0; font: 600 30px/1.15 var(--sans); letter-spacing: -0.02em; }
+.ob__lead { margin: 0; max-width: 560px; font: 400 14px/1.55 var(--sans); color: var(--muted); text-wrap: pretty; }
+.ob__opts { flex: 1; margin: 0; border: 0; padding: 0 36px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ob__opt { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--border); }
+.ob__opt--on { border-color: var(--hud); background: var(--surface); }
+.ob__opt input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--text); cursor: pointer; }
+.ob__opt label { display: flex; flex-direction: column; gap: 6px; cursor: pointer; flex: 1; min-width: 0; }
+.ob__opt-title { font: 600 15px/1.2 var(--sans); }
+.ob__opt-desc { font: 400 13px/1.5 var(--sans); color: var(--muted); text-wrap: pretty; }
+.ob__foot { padding: 20px 36px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; border-top: 1px solid var(--border); margin-top: 16px; }
+.ob__note { display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1.5 var(--sans); color: var(--faint); }
+.ob__actions { display: flex; align-items: center; gap: 10px; }
+.ob__skip { min-height: 40px; padding: 0 16px; border: 0; border-radius: var(--radius); background: transparent; color: var(--muted); cursor: pointer; font: 600 13px/1 var(--sans); }
+.ob__skip:hover { color: var(--text); }
+.ob__go { min-height: 40px; padding: 0 20px; border: 0; border-radius: var(--radius); background: var(--accent); color: var(--g-05); cursor: pointer; font: 600 13px/1 var(--sans); }
+.ob__done { flex: 1; padding: 0 36px; display: flex; flex-direction: column; gap: 14px; }
+.ob__done h2 { margin: 0; font: 600 18px/1.2 var(--sans); }
+.ob__done p { margin: 0; max-width: 62ch; color: var(--muted); font: 400 13px/1.6 var(--sans); text-wrap: pretty; }
+.ob__step { display: flex; flex-direction: column; gap: 6px; }
+.ob__step b { font: 600 14px/1.25 var(--sans); }

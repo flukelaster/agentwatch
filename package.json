@@ -1,0 +1,35 @@
+{
+  "name": "agentwatch",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local-only monitor for AI coding agents on macOS",
+  "packageManager": "pnpm@10.29.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "pnpm -r --workspace-concurrency=1 test",
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm -r build",
+    "daemon": "pnpm --filter @agentwatch/daemon start",
+    "dev:ui": "pnpm --filter @agentwatch/desktop dev",
+    "demo": "pnpm --filter @agentwatch/cli exec tsx src/main.ts demo",
+    "postinstall": "node scripts/fix-pty.mjs",
+    "e2e": "node scripts/e2e-browser.mjs",
+    "build:all": "pnpm --filter @agentwatch/daemon build && pnpm --filter @agentwatch/cli build && pnpm --filter @agentwatch/desktop build",
+    "agentwatch": "node cli/agentwatch/bin/agentwatch.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "node-pty"
+    ]
+  }
+}

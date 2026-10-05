@@ -1,0 +1,11 @@
+[
+  {"hook_event_name":"sessionStart","cursor_version":"1.7.0","workspace_roots":["/Users/dev/work/web"],"user_email":"dev@example.com","session_id":"c-conv-1","is_background_agent":false,"composer_mode":"agent"},
+  {"hook_event_name":"beforeSubmitPrompt","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"prompt":"SECRET-PROMPT add a button","attachments":[]},
+  {"hook_event_name":"postToolUse","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"tool_name":"Read","tool_input":{"file_path":"/Users/dev/work/web/src/App.tsx"},"tool_output":"SECRET-FILE-BODY","tool_use_id":"tu-1","cwd":"/Users/dev/work/web","duration":120},
+  {"hook_event_name":"afterFileEdit","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"file_path":"/Users/dev/work/web/src/App.tsx","edits":[{"old_string":"<div/>","new_string":"<div>\n<button/>\n</div>"}]},
+  {"hook_event_name":"afterShellExecution","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"command":"pnpm build","output":"SECRET-OUTPUT","duration":4200,"sandbox":false},
+  {"hook_event_name":"postToolUseFailure","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"tool_name":"Shell","tool_input":{"command":"false"},"tool_use_id":"tu-2","cwd":"/Users/dev/work/web","error_message":"command failed\nSECRET-DETAIL","failure_type":"error","duration":50,"is_interrupt":false},
+  {"hook_event_name":"afterAgentResponse","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"text":"SECRET-REPLY"},
+  {"hook_event_name":"stop","conversation_id":"c-conv-1","generation_id":"gen-1","workspace_roots":["/Users/dev/work/web"],"status":"completed","loop_count":0},
+  {"hook_event_name":"sessionEnd","session_id":"c-conv-1","workspace_roots":["/Users/dev/work/web"],"reason":"user_close","duration_ms":60000,"is_background_agent":false,"final_status":"completed"}
+]

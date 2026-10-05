@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Both windows may talk to the app's own commands. No filesystem, shell or network plugins are granted.",
+  "windows": ["main", "menubar"],
+  "permissions": ["core:default"]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@agentwatch/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "agentwatch": "./bin/agentwatch.mjs"
+  },
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "esbuild src/main.ts --bundle --platform=node --format=esm --target=node24 --outfile=dist/agentwatch.mjs --external:node-pty --banner:js=\"import{createRequire as __cr}from'node:module';const require=__cr(import.meta.url);\""
+  },
+  "dependencies": {
+    "@agentwatch/adapter-antigravity": "workspace:*",
+    "@agentwatch/adapter-claude-code": "workspace:*",
+    "@agentwatch/adapter-codex": "workspace:*",
+    "@agentwatch/adapter-cursor": "workspace:*",
+    "@agentwatch/adapter-gemini-cli": "workspace:*",
+    "@agentwatch/adapter-generic-cli": "workspace:*",
+    "@agentwatch/setup": "workspace:*",
+    "@agentwatch/adapter-sdk": "workspace:*",
+    "@agentwatch/protocol": "workspace:*",
+    "node-pty": "^1.1.0"
+  }
+}

@@ -1,0 +1,13 @@
+[
+  { "hook_event_name": "SessionStart", "session_id": "thr_c21e", "cwd": "/Users/dev/work/billing-web", "model": "gpt-5-codex", "source": "startup", "permission_mode": "default", "transcript_path": null },
+  { "hook_event_name": "UserPromptSubmit", "session_id": "thr_c21e", "turn_id": "t1", "cwd": "/Users/dev/work/billing-web", "prompt": "SENTINEL_PROMPT use token=abc123secret" },
+  { "hook_event_name": "PreToolUse", "session_id": "thr_c21e", "turn_id": "t1", "tool_name": "apply_patch", "tool_use_id": "call_1", "tool_input": { "command": "*** Begin Patch\n*** Update File: src/invoice/totals.ts\n@@\n-SENTINEL_OLD\n+SENTINEL_NEW\n+second\n*** Add File: src/invoice/new.ts\n+SENTINEL_BODY\n*** End Patch" } },
+  { "hook_event_name": "PostToolUse", "session_id": "thr_c21e", "turn_id": "t1", "tool_name": "apply_patch", "tool_use_id": "call_1", "tool_input": { "command": "*** Begin Patch\n*** Update File: src/invoice/totals.ts\n@@\n-SENTINEL_OLD\n+SENTINEL_NEW\n+second\n*** Add File: src/invoice/new.ts\n+SENTINEL_BODY\n*** End Patch" }, "tool_response": "SENTINEL_RESPONSE" },
+  { "hook_event_name": "SubagentStart", "session_id": "thr_c21e", "turn_id": "t1", "agent_id": "agent_reviewer", "agent_type": "review" },
+  { "hook_event_name": "PreToolUse", "session_id": "thr_c21e", "turn_id": "t1", "tool_name": "Bash", "tool_use_id": "call_2", "tool_input": { "command": "pnpm test invoice" } },
+  { "hook_event_name": "PostToolUse", "session_id": "thr_c21e", "turn_id": "t1", "tool_name": "Bash", "tool_use_id": "call_2", "tool_input": { "command": "pnpm test invoice" }, "tool_response": { "exit_code": 0, "stdout": "SENTINEL_STDOUT" } },
+  { "hook_event_name": "PermissionRequest", "session_id": "thr_c21e", "turn_id": "t1", "tool_name": "Bash", "tool_use_id": "call_3", "tool_input": { "command": "rm -rf dist && pnpm build" } },
+  { "hook_event_name": "SubagentStop", "session_id": "thr_c21e", "turn_id": "t1", "agent_id": "agent_reviewer", "agent_type": "review", "last_assistant_message": "SENTINEL_ASSISTANT" },
+  { "hook_event_name": "Stop", "session_id": "thr_c21e", "turn_id": "t1", "last_assistant_message": "SENTINEL_ASSISTANT" },
+  { "hook_event_name": "SessionEnd", "session_id": "thr_c21e", "reason": "other" }
+]

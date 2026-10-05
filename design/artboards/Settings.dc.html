@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1280px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column">
+
+<header style="min-height: 48px; box-sizing: border-box; padding: 8px 16px; border-bottom: 1px solid #202020; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid #202020; border-radius: 999px; font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>3 running</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid oklch(0.82 0.11 85); border-radius: 999px; color: oklch(0.82 0.11 85); font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="font-weight: 700">!</span>1 needs you</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #858585"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>127.0.0.1 · local only</span>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1">
+
+<nav aria-label="Primary" style="flex: 0 0 208px; box-sizing: border-box; padding: 12px; border-right: 1px solid #202020; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+<a href="{{n.href}}" style="{{n.style}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"/></svg><span>{{n.label}}</span></a>
+</sc-for>
+<div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>agentwatchd connected</span>
+<span>Prompts and transcripts are not stored. History kept 14 days.</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 22px 22px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font: 600 26px/1.15 'Geist', system-ui, sans-serif; letter-spacing: -0.015em">Settings</h1>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">Everything is off until you turn it on. AgentWatch never leaves this Mac.</span>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 920px">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<section aria-label="{{g.title}}" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 18px; min-height: 38px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">
+<span>{{g.title}}</span>
+<span style="font-weight: 400; letter-spacing: 0.04em">{{g.note}}</span>
+</div>
+<sc-for list="{{g.rows}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px 18px; border-bottom: 1px solid #181818">
+<div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 360px; min-width: 0">
+<span style="font: 600 14px/1.25 'Geist', system-ui, sans-serif">{{r.label}}</span>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3; text-wrap: pretty">{{r.desc}}</span>
+<sc-if value="{{r.hasCode}}" hint-placeholder-val="{{ false }}">
+<code style="display: block; margin-top: 4px; padding: 8px 10px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; border: 1px solid #202020; border-radius: 4px; font: 500 12px/1.6 'Geist Mono', ui-monospace, monospace; white-space: pre-wrap">{{r.code}}</code>
+</sc-if>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<sc-if value="{{r.isSwitch}}" hint-placeholder-val="{{ true }}">
+<span style="{{r.stateStyle}}">{{r.stateText}}</span>
+<button type="button" role="switch" aria-checked="{{r.on}}" aria-label="{{r.label}}" disabled="{{r.locked}}" onClick="{{r.toggle}}" style="{{r.trackStyle}}"><span style="{{r.thumbStyle}}"></span></button>
+</sc-if>
+<sc-if value="{{r.isSeg}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="{{r.label}}" style="display: flex; border: 1px solid #303030; border-radius: 4px; overflow: hidden">
+<sc-for list="{{r.segs}}" as="s" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{s.on}}" onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{r.isButton}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{r.press}}" style="{{r.btnStyle}}">{{r.btnLabel}}</button>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</section>
+</sc-for>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1280}}'>
+class Component extends DCLogic {
+  state = { login: false, cli: false, claude: false, codex: false, prompts: false, responses: false, pty: false, patch: false, days: '14', confirm: false, wiped: false };
+
+  renderVals() {
+    const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const ON = 'oklch(0.80 0.12 155)';
+    const FAIL = 'oklch(0.70 0.15 22)';
+    const HREFS = ['Main.dc.html', 'Sessions.dc.html', 'Agents.dc.html', 'Files.dc.html', 'Commands.dc.html', 'Logs.dc.html', 'Settings.dc.html'];
+    const ACTIVE = 6;
+    const nav = [
+      ['Overview', 'M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z'],
+      ['Sessions', 'M2.5 4h11M2.5 8h11M2.5 12h11'],
+      ['Agents', 'M8 3v4M3.5 13V10.5h9V13M8 7v3.5M6 3h4'],
+      ['Files', 'M4 2.5h5l3 3V13.5H4zM9 2.5v3h3'],
+      ['Commands', 'M3 4.5l3.5 3.5L3 11.5M8 12h5'],
+      ['Logs', 'M3 3.5h10M3 6.5h7M3 9.5h10M3 12.5h5'],
+      ['Settings', 'M3 5h6M11 5h2M3 11h2M7 11h6M9 3v4M5 9v4'],
+    ].map(([label, d], i) => ({
+      label, d, href: HREFS[i],
+      style: `display:flex;align-items:center;gap:10px;min-height:36px;box-sizing:border-box;padding:0 10px;border-radius:4px;text-decoration:none;font:${i === ACTIVE ? 600 : 500} 13px/1 'Geist',system-ui,sans-serif;color:${i === ACTIVE ? '#f2f2f2' : '#a3a3a3'};background:${i === ACTIVE ? '#131313' : 'transparent'}`,
+    }));
+
+    const base = { isSwitch: false, isSeg: false, isButton: false, hasCode: false, code: '', segs: [], on: false, locked: false, toggle: () => {}, press: () => {}, stateText: '', stateStyle: '', trackStyle: '', thumbStyle: '', btnLabel: '', btnStyle: '' };
+    const sw = (key, label, desc, locked) => {
+      const on = locked ? true : this.state[key];
+      return {
+        ...base, label, desc, isSwitch: true, on, locked: !!locked,
+        toggle: () => { if (!locked) this.setState({ [key]: !this.state[key] }); },
+        stateText: locked ? 'always on' : on ? 'on' : 'off',
+        stateStyle: `font: 500 11px/1 'Geist Mono', ui-monospace, monospace;letter-spacing:0.1em;text-transform:uppercase;text-transform:none;color:${on ? ON : '#858585'}`,
+        trackStyle: `position:relative;flex:none;width:46px;height:28px;padding:0;border-radius:999px;border:1px solid ${on ? '#f2f2f2' : '#303030'};background:${on ? '#f2f2f2' : '#131313'};cursor:${locked ? 'not-allowed' : 'pointer'};opacity:${locked ? 0.7 : 1}`,
+        thumbStyle: `position:absolute;top:3px;left:${on ? 21 : 3}px;width:20px;height:20px;border-radius:50%;background:${on ? '#050505' : '#a3a3a3'}`,
+      };
+    };
+    const btn = (label, desc, btnLabel, press, danger, code) => ({
+      ...base, label, desc, isButton: true, btnLabel, press, hasCode: !!code, code: code || '',
+      btnStyle: `display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 16px;border-radius:4px;cursor:pointer;border:1px solid ${danger ? FAIL : '#ededed'};background:transparent;color:${danger ? FAIL : '#ededed'};font:600 13px/1 'Geist',system-ui,sans-serif`,
+    });
+
+    const days = [['0', 'Session only'], ['7', '7 days'], ['14', '14 days'], ['30', '30 days']];
+    const seg = {
+      ...base, label: 'Keep event history for', isSeg: true,
+      desc: 'Older sessions are deleted automatically. Session only clears everything when a session ends.',
+      segs: days.map(([k, label], i) => {
+        const on = this.state.days === k;
+        return { label, on, pick: () => this.setState({ days: k }), style: `min-height:36px;padding:0 14px;cursor:pointer;border:0;border-left:${i ? '1px solid #303030' : '0'};background:${on ? '#f2f2f2' : 'transparent'};color:${on ? '#050505' : '#a3a3a3'};font:600 12px/1 ${MONO}` };
+      }),
+    };
+
+    const cliDone = this.state.cli;
+    const del = this.state.confirm;
+    const groups = [
+      { title: 'STARTUP', note: 'per-user LaunchAgent, never root', rows: [
+        sw('login', 'Start monitoring at login', 'Installs a LaunchAgent for your user so agentwatchd runs after you sign in. Off until you turn it on.'),
+        btn('AgentWatch command line', cliDone ? 'Installed. Open a new terminal to use it.' : 'Adds the agentwatch command to your PATH so you can wrap any agent.', cliDone ? 'Installed' : 'Install CLI', () => this.setState({ cli: true }), false, 'agentwatch claude\nagentwatch codex\nagentwatch run -- custom-agent --project .'),
+      ] },
+      { title: 'INTEGRATIONS', note: 'each is an explicit opt-in', rows: [
+        sw('claude', 'Claude Code hooks', 'Adds hook entries so AgentWatch receives session, tool, subagent and permission events. Prompt and response text are discarded before they are stored. Remove them here at any time.'),
+        sw('codex', 'Codex hooks', 'Observes plain codex sessions. For token usage and approvals in full, start Codex with agentwatch codex so the App Server adapter can be used.'),
+      ] },
+      { title: 'PRIVACY', note: 'what gets written to disk', rows: [
+        sw('prompts', 'Store prompt text', 'Off by default. Hooks can carry the prompt you typed; AgentWatch drops it.'),
+        sw('responses', 'Store assistant responses', 'Off by default. Only tool names, paths, exit codes and counts are kept.'),
+        sw('pty', 'Keep raw terminal transcript', 'Off by default. Terminal output is read live for status and is not saved.'),
+        sw('patch', 'Keep full Git patches', 'Off by default. Only +/− counts are stored; a patch is built when you open a diff.'),
+        sw('redact', 'Redact credentials in commands and errors', 'Applied before anything is saved, so a token in a command line never reaches the database.', true),
+      ] },
+      { title: 'DATA', note: 'stored in ~/Library/Application Support/AgentWatch', rows: [
+        seg,
+        btn('Delete all local history', this.state.wiped ? 'Done. The database and its WAL files were removed.' : del ? 'This removes every session, event, file and command from this Mac. It cannot be undone.' : 'Removes the database and its WAL files after closing all handles.', this.state.wiped ? 'Deleted' : del ? 'Yes, delete everything' : 'Delete history…', () => {
+          if (this.state.wiped) return;
+          if (del) this.setState({ wiped: true, confirm: false }); else this.setState({ confirm: true });
+        }, !this.state.wiped),
+        btn('Diagnostics', 'Builds a redacted bundle as a file on this Mac. AgentWatch does not upload crash reports or analytics.', 'Export bundle', () => {}, false),
+      ] },
+    ];
+
+    return { nav, groups };
+  }
+}
+</script>
+</body>
+</html>

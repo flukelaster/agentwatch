@@ -1,0 +1,13 @@
+.themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; padding: 16px 18px 18px; }
+.themecard { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 10px; text-align: left; cursor: pointer; border-radius: var(--radius-lg); border: 1px solid var(--border); background: transparent; color: var(--text); }
+.themecard:hover { border-color: var(--border-strong); }
+.themecard[aria-checked="true"] { border-color: var(--accent); background: var(--surface); }
+.themecard:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.themecard__preview { display: flex; flex-direction: column; justify-content: space-between; gap: 8px; width: 100%; height: 68px; padding: 8px; border-radius: 6px; border: 1px solid; }
+.themecard__panel { display: flex; flex-direction: column; gap: 5px; padding: 7px 8px; border-radius: 5px; border: 1px solid; }
+.themecard__panel i { display: block; height: 4px; border-radius: 2px; }
+.themecard__dots { display: flex; gap: 5px; }
+.themecard__dots i { width: 6px; height: 6px; border-radius: 50%; }
+.themecard__name { display: flex; align-items: baseline; gap: 8px; font: 600 13px/1.2 var(--sans); }
+.themecard__name small { font: 500 10px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.themecard__tag { font: 400 12px/1.4 var(--sans); color: var(--muted); }

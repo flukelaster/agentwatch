@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch Sessions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column">
+
+<header style="min-height: 48px; box-sizing: border-box; padding: 8px 16px; border-bottom: 1px solid #202020; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid #202020; border-radius: 999px; font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>3 running</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid oklch(0.82 0.11 85); border-radius: 999px; color: oklch(0.82 0.11 85); font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="font-weight: 700">!</span>1 needs you</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #858585"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>127.0.0.1 · local only</span>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1">
+
+<nav aria-label="Primary" style="flex: 0 0 208px; box-sizing: border-box; padding: 12px; border-right: 1px solid #202020; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+<a href="{{n.href}}" style="{{n.style}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"/></svg><span>{{n.label}}</span></a>
+</sc-for>
+<div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>agentwatchd connected</span>
+<span>Prompts and transcripts are not stored. History kept 14 days.</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 22px 22px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font: 600 26px/1.15 'Geist', system-ui, sans-serif; letter-spacing: -0.015em">Sessions</h1>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">Running now and kept locally for 14 days.</span>
+</div>
+<div role="group" aria-label="Filter sessions" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}<span style="font-weight: 400; color: #a3a3a3">{{c.count}}</span></button>
+</sc-for>
+</div>
+</div>
+
+<section aria-label="Session list" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="overflow-x: auto">
+<div style="min-width: 980px">
+<div style="display: grid; grid-template-columns: 112px minmax(0, 1fr) 128px 108px 84px 56px 92px 56px 108px 64px; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">
+<span>Provider</span><span>Session</span><span>Status</span><span>Started</span><span>Length</span><span>Files</span><span>+ / −</span><span>Cmds</span><span>Tokens</span><span></span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<div style="{{r.rowStyle}}">
+<span style="{{r.providerStyle}}"><span style="{{r.dotStyle}}"></span>{{r.provider}}</span>
+<span style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+<a href="Session.dc.html" style="font: 600 14px/1.2 'Geist', system-ui, sans-serif; color: #ededed; text-decoration: none">{{r.repo}}</a>
+<span style="font: 400 11.5px/1.2 'Geist Mono', ui-monospace, monospace; color: #a3a3a3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.branch}}</span>
+</span>
+<span style="{{r.statusStyle}}">{{r.status}}</span>
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{r.started}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace">{{r.length}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace">{{r.files}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace">{{r.diff}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace">{{r.cmds}}</span>
+<span style="{{r.tokenStyle}}">{{r.tokens}}</span>
+<span>
+<sc-if value="{{r.canDelete}}" hint-placeholder-val="{{ false }}">
+<button type="button" aria-label="{{r.deleteLabel}}" onClick="{{r.remove}}" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border: 1px solid #202020; border-radius: 4px; background: transparent; color: #a3a3a3; cursor: pointer">
+<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.5 8.5h6l.5-8.5"/></svg>
+</button>
+</sc-if>
+</span>
+</div>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 40px 14px; text-align: center; font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">No sessions match this filter.</div>
+</sc-if>
+</div>
+</div>
+<div style="padding: 10px 14px; border-top: 1px solid #202020; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">Deleting a session removes its events, files and commands from this Mac. Running sessions cannot be deleted. Tokens appear only when the provider reports them.</div>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  state = { filter: 'all', gone: [] };
+
+  renderVals() {
+    const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const COL = { claude: '#ededed', codex: '#c8c8c8', generic: '#999999' };
+    const ST = { run: 'oklch(0.80 0.12 155)', ask: 'oklch(0.82 0.11 85)', fail: 'oklch(0.70 0.15 22)', idle: '#a3a3a3', done: '#a3a3a3' };
+    const HREFS = ['Main.dc.html', 'Sessions.dc.html', 'Agents.dc.html', 'Files.dc.html', 'Commands.dc.html', 'Logs.dc.html', 'Settings.dc.html'];
+    const ACTIVE = 1;
+    const nav = [
+      ['Overview', 'M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z'],
+      ['Sessions', 'M2.5 4h11M2.5 8h11M2.5 12h11'],
+      ['Agents', 'M8 3v4M3.5 13V10.5h9V13M8 7v3.5M6 3h4'],
+      ['Files', 'M4 2.5h5l3 3V13.5H4zM9 2.5v3h3'],
+      ['Commands', 'M3 4.5l3.5 3.5L3 11.5M8 12h5'],
+      ['Logs', 'M3 3.5h10M3 6.5h7M3 9.5h10M3 12.5h5'],
+      ['Settings', 'M3 5h6M11 5h2M3 11h2M7 11h6M9 3v4M5 9v4'],
+    ].map(([label, d], i) => ({
+      label, d, href: HREFS[i],
+      style: `display:flex;align-items:center;gap:10px;min-height:36px;box-sizing:border-box;padding:0 10px;border-radius:4px;text-decoration:none;font:${i === ACTIVE ? 600 : 500} 13px/1 'Geist',system-ui,sans-serif;color:${i === ACTIVE ? '#f2f2f2' : '#a3a3a3'};background:${i === ACTIVE ? '#131313' : 'transparent'}`,
+    }));
+
+    const ALL = [
+      { id: 'a', pk: 'claude', provider: 'Claude Code', repo: 'auth-service', branch: 'fix/session-fk', status: 'Running tests', st: 'run', group: 'active', started: 'Today 23:31', length: '03:42', files: '12', diff: '+142 −38', cmds: '14', tokens: 'not reported' },
+      { id: 'b', pk: 'codex', provider: 'Codex', repo: 'billing-web', branch: 'feat/invoice-totals', status: 'Needs you', st: 'ask', group: 'active', started: 'Today 23:09', length: '12:08', files: '3', diff: '+64 −9', cmds: '3', tokens: '61.4k' },
+      { id: 'c', pk: 'generic', provider: 'Generic CLI', repo: 'notes-cli', branch: 'main', status: 'Idle', st: 'idle', group: 'active', started: 'Today 22:40', length: '41:15', files: '1', diff: '+3 −1', cmds: '1', tokens: 'unavailable' },
+      { id: 'd', pk: 'claude', provider: 'Claude Code', repo: 'api-gateway', branch: 'chore/rate-limits', status: 'Finished', st: 'done', group: 'finished', started: 'Today 22:10', length: '48:12', files: '7', diff: '+96 −21', cmds: '18', tokens: 'not reported' },
+      { id: 'e', pk: 'codex', provider: 'Codex', repo: 'billing-web', branch: 'feat/proration', status: 'Finished', st: 'done', group: 'finished', started: 'Today 20:41', length: '26:30', files: '9', diff: '+210 −57', cmds: '24', tokens: '142.8k' },
+      { id: 'f', pk: 'claude', provider: 'Claude Code', repo: 'docs-site', branch: 'main', status: 'Failed', st: 'fail', group: 'failed', started: 'Today 19:12', length: '06:03', files: '2', diff: '+8 −0', cmds: '5', tokens: 'not reported' },
+      { id: 'g', pk: 'generic', provider: 'Generic CLI', repo: 'notes-cli', branch: 'main', status: 'Finished', st: 'done', group: 'finished', started: 'Yesterday 17:20', length: '1:12:44', files: '4', diff: '+31 −12', cmds: '6', tokens: 'unavailable' },
+    ].filter((s) => this.state.gone.indexOf(s.id) < 0);
+
+    const f = this.state.filter;
+    const match = (s) => f === 'all' || (f === 'ask' ? s.st === 'ask' : s.group === f);
+    const defs = [['all', 'All'], ['active', 'Active'], ['ask', 'Needs you'], ['finished', 'Finished'], ['failed', 'Failed']];
+    const chips = defs.map(([k, label]) => {
+      const on = f === k;
+      return {
+        label, on, count: ' ' + ALL.filter((s) => k === 'all' || (k === 'ask' ? s.st === 'ask' : s.group === k)).length,
+        pick: () => this.setState({ filter: k }),
+        style: `display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 14px;border-radius:999px;cursor:pointer;border:1px solid ${on ? '#4a4a4a' : '#202020'};background:${on ? '#131313' : 'transparent'};color:${on ? '#ededed' : '#a3a3a3'};font:500 12px/1 ${MONO}`,
+      };
+    });
+
+    const rows = ALL.filter(match).map((s) => ({
+      ...s,
+      rowStyle: `display:grid;grid-template-columns:112px minmax(0,1fr) 128px 108px 84px 56px 92px 56px 108px 64px;gap:12px;align-items:center;min-height:60px;box-sizing:border-box;padding:8px 14px;border-bottom:1px solid #181818;background:${s.st === 'ask' ? '#15140c' : 'transparent'}`,
+      providerStyle: `display:inline-flex;align-items:center;gap:8px;font: 500 11px/1 'Geist Mono', ui-monospace, monospace;letter-spacing:0.1em;text-transform:uppercase;color:${COL[s.pk]}`,
+      dotStyle: `flex:none;width:7px;height:7px;border-radius:50%;background:${COL[s.pk]}`,
+      statusStyle: `font: 500 11px/1 'Geist Mono', ui-monospace, monospace;letter-spacing:0.1em;text-transform:uppercase;color:${ST[s.st]}`,
+      tokenStyle: `font:500 12px/1 ${MONO};color:${s.tokens.length < 7 ? '#ededed' : '#858585'}`,
+      canDelete: s.group !== 'active',
+      deleteLabel: 'Delete session ' + s.repo + ' from ' + s.started,
+      remove: () => this.setState({ gone: this.state.gone.concat([s.id]) }),
+    }));
+
+    return { nav, chips, rows, empty: rows.length === 0 };
+  }
+}
+</script>
+</body>
+</html>

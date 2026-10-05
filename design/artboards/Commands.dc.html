@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch Commands</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column">
+
+<header style="min-height: 48px; box-sizing: border-box; padding: 8px 16px; border-bottom: 1px solid #202020; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid #202020; border-radius: 999px; font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>3 running</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid oklch(0.82 0.11 85); border-radius: 999px; color: oklch(0.82 0.11 85); font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="font-weight: 700">!</span>1 needs you</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #858585"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>127.0.0.1 · local only</span>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1">
+
+<nav aria-label="Primary" style="flex: 0 0 208px; box-sizing: border-box; padding: 12px; border-right: 1px solid #202020; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+<a href="{{n.href}}" style="{{n.style}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"/></svg><span>{{n.label}}</span></a>
+</sc-for>
+<div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>agentwatchd connected</span>
+<span>Prompts and transcripts are not stored. History kept 14 days.</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 22px 22px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font: 600 26px/1.15 'Geist', system-ui, sans-serif; letter-spacing: -0.015em">Commands</h1>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">Shell commands run by agents, newest first.</span>
+</div>
+<div role="group" aria-label="Filter commands" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}<span style="font-weight: 400; color: #a3a3a3">{{c.count}}</span></button>
+</sc-for>
+</div>
+</div>
+
+<section aria-label="Command list" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="overflow-x: auto">
+<div style="min-width: 980px">
+<div style="display: grid; grid-template-columns: 76px minmax(0, 1.6fr) 96px 108px 84px 120px 150px; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">
+<span>Started</span><span>Command</span><span>Agent</span><span>Session</span><span>Time</span><span>Result</span><span>Evidence</span>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="9">
+<div style="{{r.rowStyle}}">
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{r.t}}</span>
+<span style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+<code style="font: 500 12.5px/1.2 'Geist Mono', ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{r.cmd}}</code>
+<sc-if value="{{r.redacted}}" hint-placeholder-val="{{ false }}">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">Redacted before storage</span>
+</sc-if>
+</span>
+<span style="{{r.agentStyle}}">{{r.agent}}</span>
+<span style="{{r.sessionStyle}}">{{r.session}}</span>
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{r.time}}</span>
+<span style="{{r.resultStyle}}">{{r.result}}</span>
+<span style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="display: flex; gap: 2px"><sc-for list="{{r.bars}}" as="b" hint-placeholder-count="3"><span style="{{b.style}}"></span></sc-for></span>
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">{{r.conf}}</span>
+</span>
+<span style="font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{r.src}}</span>
+</span>
+</div>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 40px 14px; text-align: center; font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">No commands match this filter.</div>
+</sc-if>
+</div>
+</div>
+<div style="padding: 10px 14px; border-top: 1px solid #202020; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">Command lines are redacted before they are stored. A command found only in the process tree is MED, and one that finishes between samples can be missed.</div>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  state = { filter: 'all' };
+
+  renderVals() {
+    const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const COL = { claude: '#ededed', codex: '#c8c8c8', generic: '#999999' };
+    const FAIL = 'oklch(0.70 0.15 22)';
+    const ASK = 'oklch(0.82 0.11 85)';
+    const RUN = 'oklch(0.80 0.12 155)';
+    const HREFS = ['Main.dc.html', 'Sessions.dc.html', 'Agents.dc.html', 'Files.dc.html', 'Commands.dc.html', 'Logs.dc.html', 'Settings.dc.html'];
+    const ACTIVE = 4;
+    const nav = [
+      ['Overview', 'M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z'],
+      ['Sessions', 'M2.5 4h11M2.5 8h11M2.5 12h11'],
+      ['Agents', 'M8 3v4M3.5 13V10.5h9V13M8 7v3.5M6 3h4'],
+      ['Files', 'M4 2.5h5l3 3V13.5H4zM9 2.5v3h3'],
+      ['Commands', 'M3 4.5l3.5 3.5L3 11.5M8 12h5'],
+      ['Logs', 'M3 3.5h10M3 6.5h7M3 9.5h10M3 12.5h5'],
+      ['Settings', 'M3 5h6M11 5h2M3 11h2M7 11h6M9 3v4M5 9v4'],
+    ].map(([label, d], i) => ({
+      label, d, href: HREFS[i],
+      style: `display:flex;align-items:center;gap:10px;min-height:36px;box-sizing:border-box;padding:0 10px;border-radius:4px;text-decoration:none;font:${i === ACTIVE ? 600 : 500} 13px/1 'Geist',system-ui,sans-serif;color:${i === ACTIVE ? '#f2f2f2' : '#a3a3a3'};background:${i === ACTIVE ? '#131313' : 'transparent'}`,
+    }));
+
+    const CMDS = [
+      { t: '23:34:16', cmd: 'vitest run  (child process)', agent: 'worker', session: 'auth-service', pk: 'claude', time: '3.7s', kind: 'fail', result: 'exit 1', conf: 'medium', src: 'process', redacted: false },
+      { t: '23:34:15', cmd: 'pnpm test', agent: 'worker', session: 'auth-service', pk: 'claude', time: '3.8s', kind: 'fail', result: '✕ exit 1', conf: 'high', src: 'claude-hook', redacted: false },
+      { t: '23:33:50', cmd: 'git diff --stat', agent: 'main', session: 'auth-service', pk: 'claude', time: '0.3s', kind: 'ok', result: 'exit 0', conf: 'high', src: 'claude-hook', redacted: false },
+      { t: '23:32:41', cmd: 'curl -H "Authorization: Bearer [REDACTED]" localhost:4010/health', agent: 'researcher', session: 'auth-service', pk: 'claude', time: '0.1s', kind: 'ok', result: 'exit 0', conf: 'high', src: 'claude-hook', redacted: true },
+      { t: '23:31:58', cmd: 'pnpm dev --port 4010', agent: 'researcher', session: 'auth-service', pk: 'claude', time: '02:31', kind: 'run', result: '● running', conf: 'high', src: 'claude-hook', redacted: false },
+      { t: '23:21:22', cmd: 'rm -rf dist && pnpm build', agent: 'main', session: 'billing-web', pk: 'codex', time: '—', kind: 'ask', result: '! awaiting you', conf: 'high', src: 'codex-app-server', redacted: false },
+      { t: '23:21:14', cmd: 'pnpm test invoice', agent: 'main', session: 'billing-web', pk: 'codex', time: '6.1s', kind: 'ok', result: 'exit 0', conf: 'high', src: 'codex-app-server', redacted: false },
+      { t: '23:21:00', cmd: 'git status --short', agent: 'main', session: 'billing-web', pk: 'codex', time: '0.2s', kind: 'ok', result: 'exit 0', conf: 'high', src: 'codex-app-server', redacted: false },
+      { t: '23:02:44', cmd: 'git status  (child of wrapper)', agent: 'unknown', session: 'notes-cli', pk: 'generic', time: '0.2s', kind: 'ok', result: 'exit 0', conf: 'medium', src: 'process', redacted: false },
+    ];
+
+    const f = this.state.filter;
+    const test = (r, k) => k === 'all' || (k === 'fail' ? r.kind === 'fail' : k === 'run' ? r.kind === 'run' : r.kind === 'ask');
+    const defs = [['all', 'All'], ['run', 'Running'], ['ask', 'Awaiting you'], ['fail', 'Failed']];
+    const chips = defs.map(([k, label]) => {
+      const on = f === k;
+      return {
+        label, on, count: ' ' + CMDS.filter((r) => test(r, k)).length,
+        pick: () => this.setState({ filter: k }),
+        style: `display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:0 14px;border-radius:999px;cursor:pointer;border:1px solid ${on ? '#4a4a4a' : '#202020'};background:${on ? '#131313' : 'transparent'};color:${on ? '#ededed' : '#a3a3a3'};font:500 12px/1 ${MONO}`,
+      };
+    });
+
+    const confN = { high: 3, medium: 2, low: 1 };
+    const confL = { high: 'High', medium: 'Med', low: 'Low' };
+    const rc = { fail: FAIL, ask: ASK, run: RUN, ok: '#a3a3a3' };
+    const rows = CMDS.filter((r) => test(r, f)).map((r) => ({
+      ...r, conf: confL[r.conf],
+      rowStyle: `display:grid;grid-template-columns:76px minmax(0,1.6fr) 96px 108px 84px 120px 150px;gap:12px;align-items:center;min-height:56px;box-sizing:border-box;padding:8px 14px;border-bottom:1px solid #181818;background:${r.kind === 'fail' ? '#1a1010' : r.kind === 'ask' ? '#15140c' : 'transparent'}`,
+      agentStyle: `font:500 12px/1 ${MONO};color:${r.agent === 'unknown' ? '#858585' : COL[r.pk]}`,
+      sessionStyle: `font:600 11.5px/1 ${MONO};color:${COL[r.pk]}`,
+      resultStyle: `font:600 11.5px/1 ${MONO};color:${rc[r.kind]}`,
+      bars: [0, 1, 2].map((i) => ({ style: `width:10px;height:6px;border-radius:1px;background:${i < confN[CMDS.find((x) => x.t === r.t && x.cmd === r.cmd).conf] ? '#f2f2f2' : '#2a2a2a'}` })),
+    }));
+
+    return { nav, chips, rows, empty: rows.length === 0 };
+  }
+}
+</script>
+</body>
+</html>

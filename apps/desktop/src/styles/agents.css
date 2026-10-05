@@ -1,0 +1,18 @@
+.ag-head { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; background: var(--g-10); border-bottom: 1px solid var(--line); }
+.ag-head__title { font: 600 14px/1 var(--sans); }
+.ag-head__prov { font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.ag-name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ag-name__branch { font: 400 13px/1 var(--mono); color: var(--g-6b); flex: none; }
+.ag-name__text { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.ag-name__name { font: 600 12.5px/1.1 var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ag-name__role { font: 400 11px/1.1 var(--mono); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ag-state { font: 600 11px/1.2 var(--mono); }
+.ag-up { font: 400 12px/1 var(--mono); color: var(--muted); }
+.ag-evid { display: flex; flex-direction: column; gap: 6px; }
+.ag-src { font: 400 11px/1 var(--mono); color: var(--muted); }
+.mx-val { font: 500 12px/1.2 var(--mono); }
+.mx-val--strong { color: var(--text); }
+.mx-val--partial { color: var(--muted); }
+.mx-val--none { color: var(--faint); }
+.mx-signal { font: 500 12.5px/1.2 var(--sans); }
+.mx-note { font: 400 11px/1 var(--mono); letter-spacing: 0.04em; color: var(--muted); }

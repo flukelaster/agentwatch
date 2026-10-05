@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch Session</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column">
+
+<header style="min-height: 48px; box-sizing: border-box; padding: 8px 16px; border-bottom: 1px solid #202020; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid #202020; border-radius: 999px; font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="width: 8px; height: 8px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>3 running</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border: 1px solid oklch(0.82 0.11 85); border-radius: 999px; color: oklch(0.82 0.11 85); font: 500 12px/1 'Geist Mono', ui-monospace, monospace"><span style="font-weight: 700">!</span>1 needs you</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #858585">
+<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>
+127.0.0.1 · local only
+</span>
+</div>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; flex: 1">
+
+<nav aria-label="Primary" style="flex: 0 0 208px; box-sizing: border-box; padding: 12px; border-right: 1px solid #202020; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="7">
+<a href="{{n.href}}" style="{{n.style}}">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"/></svg>
+<span>{{n.label}}</span>
+</a>
+</sc-for>
+<div style="margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.80 0.12 155)"></span>agentwatchd connected</span>
+<span>Prompts and transcripts are not stored. History kept 14 days.</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; background-image: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 22px 22px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Session header" style="display: flex; flex-direction: column; gap: 12px">
+<div style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #858585"><a href="Sessions.dc.html" style="color: #a3a3a3">Sessions</a>  /  billing-web</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 40px">
+<div style="display: flex; flex-direction: column; gap: 10px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<span style="display: inline-flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px; border: 1px solid #c8c8c8; border-radius: 999px; color: #c8c8c8; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase"><span style="width: 7px; height: 7px; border-radius: 50%; background: #c8c8c8"></span>Codex</span>
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">gpt-5-codex  ·  ~/work/billing-web  ·  feat/invoice-totals</span>
+</div>
+<h1 style="margin: 0; font: 600 26px/1.15 'Geist', system-ui, sans-serif; letter-spacing: -0.015em">billing-web</h1>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px 40px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">Status</span>
+<span style="font: 600 14px/1 'Geist Mono', ui-monospace, monospace; color: oklch(0.82 0.11 85)">! Waiting for approval</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">Elapsed</span>
+<span style="font: 500 14px/1 'Geist Mono', ui-monospace, monospace">12:08</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">Diff</span>
+<span style="font: 500 14px/1 'Geist Mono', ui-monospace, monospace">+64 −9</span>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Approval request" style="background: #15140c; border: 1px solid oklch(0.82 0.11 85); border-radius: 4px; padding: 16px 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px">
+<div style="display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1 1 360px">
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: oklch(0.82 0.11 85)">Approval requested · command execution</span>
+<code style="display: block; padding: 10px 12px; background: radial-gradient(900px 420px at 88% -8%, #111111, #050505 70%), #050505; border: 1px solid #202020; border-radius: 4px; font: 500 14px/1.3 'Geist Mono', ui-monospace, monospace; overflow-wrap: anywhere">rm -rf dist &amp;&amp; pnpm build</code>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3">Asked by main at 23:21:22 · waiting 02:14 · answer it in the Codex terminal</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start">
+<span style="display: flex; align-items: center; gap: 8px; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3"><span style="display: flex; gap: 2px"><span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span><span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span><span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span></span>High</span>
+<span style="font: 400 11.5px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">codex-app-server</span>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(560px, 100%), 1fr)); gap: 16px">
+
+<section aria-label="File activity" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px; min-height: 38px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">
+<span>File activity</span>
+<span style="font-weight: 400">4</span>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 560px">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 72px 84px 120px; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #181818; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">
+<span>Path</span><span>Op</span><span>+ / −</span><span>Evidence</span>
+</div>
+<sc-for list="{{files}}" as="f" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 72px 84px 120px; gap: 12px; align-items: center; min-height: 52px; box-sizing: border-box; padding: 8px 14px; border-bottom: 1px solid #181818">
+<span style="display: flex; flex-direction: column; gap: 5px; min-width: 0">
+<span style="font: 500 12.5px/1.2 'Geist Mono', ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{f.path}}</span>
+<span style="font: 400 11px/1.2 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{f.who}}</span>
+</span>
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">{{f.op}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace">{{f.delta}}</span>
+<span style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="display: flex; gap: 2px">
+<sc-for list="{{f.bars}}" as="b" hint-placeholder-count="3">
+<span style="{{b.style}}"></span>
+</sc-for>
+</span>
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">{{f.conf}}</span>
+</span>
+<span style="font: 400 11px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{f.src}}</span>
+</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding: 10px 14px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">A Git change that was already there when the session started is listed but not credited to any agent.</div>
+</section>
+
+<section aria-label="Command activity" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px; min-height: 38px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">
+<span>Command activity</span>
+<span style="font-weight: 400">3</span>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 560px">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 72px 96px 120px; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #181818; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #858585">
+<span>Command</span><span>Agent</span><span>Time</span><span>Exit</span><span>Evidence</span>
+</div>
+<sc-for list="{{commands}}" as="c" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) 64px 72px 96px 120px; gap: 12px; align-items: center; min-height: 52px; box-sizing: border-box; padding: 8px 14px; border-bottom: 1px solid #181818">
+<span style="font: 500 12.5px/1.2 'Geist Mono', ui-monospace, monospace; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{c.cmd}}</span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace; color: #c8c8c8">{{c.agent}}</span>
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{c.time}}</span>
+<span style="{{c.exitStyle}}">{{c.exit}}</span>
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="display: flex; gap: 2px">
+<span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span><span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span><span style="width: 10px; height: 6px; border-radius: 1px; background: #f2f2f2"></span>
+</span>
+<span style="font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">High</span>
+</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding: 10px 14px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">Command lines are redacted before they are stored. Environment variables are never captured.</div>
+</section>
+
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px">
+
+<section aria-label="Token usage" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px; min-height: 38px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">
+<span>Token usage</span>
+<span style="font-weight: 400; letter-spacing: 0.04em">thread · provider-reported</span>
+</div>
+<div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 500 30px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: -0.02em">61.4k</span>
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">input + output</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{usage}}" as="u" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) 52px; gap: 12px; align-items: center">
+<span style="font: 400 12px/1 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">{{u.label}}</span>
+<span style="height: 8px; border-radius: 4px; background: #1a1a1a; display: block"><span style="{{u.barStyle}}"></span></span>
+<span style="font: 500 12px/1 'Geist Mono', ui-monospace, monospace; text-align: right">{{u.value}}</span>
+</div>
+</sc-for>
+</div>
+<span style="font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">Cached is part of input; reasoning is part of output. Source: thread/tokenUsage/updated.</span>
+</div>
+</section>
+
+<section aria-label="Git baseline" style="background: linear-gradient(#4a4a4a, #4a4a4a) top left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) top right / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom left / 1px 14px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 14px 1px no-repeat, linear-gradient(#4a4a4a, #4a4a4a) bottom right / 1px 14px no-repeat, #0b0b0b; border: 1px solid #202020; border-radius: 4px; min-width: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px; min-height: 38px; border-bottom: 1px solid #202020; font: 500 11px/1 'Geist Mono', ui-monospace, monospace; letter-spacing:0.1em;text-transform:uppercase; color: #a3a3a3">
+<span>Git</span>
+<span style="font-weight: 400; letter-spacing: 0.04em">metadata only</span>
+</div>
+<div style="padding: 6px 18px; display: flex; flex-direction: column">
+<div style="display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid #181818"><span style="font: 400 11px/1.3 'Geist Mono', ui-monospace, monospace; color: #858585">dirty at start</span><span style="font: 500 12.5px/1.3 'Geist Mono', ui-monospace, monospace">1 file</span></div>
+<div style="display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid #181818"><span style="font: 400 11px/1.3 'Geist Mono', ui-monospace, monospace; color: #858585">changed since</span><span style="font: 500 12.5px/1.3 'Geist Mono', ui-monospace, monospace">2 files · +64 −9</span></div>
+<div style="display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid #181818"><span style="font: 400 11px/1.3 'Geist Mono', ui-monospace, monospace; color: #858585">other sessions here</span><span style="font: 500 12.5px/1.3 'Geist Mono', ui-monospace, monospace">none</span></div>
+<div style="display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0"><span style="font: 400 11px/1.3 'Geist Mono', ui-monospace, monospace; color: #858585">full patch</span><span style="font: 500 12.5px/1.3 'Geist Mono', ui-monospace, monospace; color: #a3a3a3">not stored</span></div>
+</div>
+<div style="padding: 10px 14px; border-top: 1px solid #202020; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585; text-wrap: pretty">A patch is generated only when you open a diff.</div>
+</section>
+
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const MONO = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const CX = '#c8c8c8';
+    const confN = { high: 3, medium: 2, low: 1 };
+    const confL = { high: 'High', medium: 'Med', low: 'Low' };
+    const bars = (c) => [0, 1, 2].map((i) => ({ style: `width:10px;height:6px;border-radius:1px;background:${i < confN[c] ? '#f2f2f2' : '#2a2a2a'}` }));
+
+    const nav = [
+      ['Overview', 'M2.5 7.5 8 3l5.5 4.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z', false],
+      ['Sessions', 'M2.5 4h11M2.5 8h11M2.5 12h11', true],
+      ['Agents', 'M8 3v4M3.5 13V10.5h9V13M8 7v3.5M6 3h4', false],
+      ['Files', 'M4 2.5h5l3 3V13.5H4zM9 2.5v3h3', false],
+      ['Commands', 'M3 4.5l3.5 3.5L3 11.5M8 12h5', false],
+      ['Logs', 'M3 3.5h10M3 6.5h7M3 9.5h10M3 12.5h5', false],
+      ['Settings', 'M3 5h6M11 5h2M3 11h2M7 11h6M9 3v4M5 9v4', false],
+    ].map(([label, d, active], i) => ({
+      label, d, href: ['Main.dc.html', 'Sessions.dc.html', 'Agents.dc.html', 'Files.dc.html', 'Commands.dc.html', 'Logs.dc.html', 'Settings.dc.html'][i],
+      style: `display:flex;align-items:center;gap:10px;min-height:36px;box-sizing:border-box;padding:0 10px;border-radius:4px;text-decoration:none;font:${active ? 600 : 500} 13px/1 'Geist',system-ui,sans-serif;color:${active ? '#ededed' : '#a3a3a3'};background:${active ? '#131313' : 'transparent'}`,
+    }));
+
+    const files = [
+      { path: 'src/invoice/totals.ts', who: 'main', op: 'Edit', delta: '+38 −5', conf: 'high', src: 'codex-app-server' },
+      { path: 'src/invoice/totals.test.ts', who: 'main', op: 'Edit', delta: '+26 −4', conf: 'high', src: 'codex-app-server' },
+      { path: 'src/invoice/format.ts', who: 'reviewer', op: 'Read', delta: '—', conf: 'high', src: 'codex-hook' },
+      { path: 'pnpm-lock.yaml', who: 'not credited to any agent', op: 'Dirty', delta: 'at start', conf: 'low', src: 'git baseline' },
+    ].map((f) => ({ ...f, conf: confL[f.conf], bars: bars(f.conf === 'High' ? 'high' : f.conf === 'Med' ? 'medium' : 'low') }));
+    // bars() was called with the label form above; remap from the original keys for safety
+    files[0].bars = bars('high'); files[1].bars = bars('high'); files[2].bars = bars('high'); files[3].bars = bars('low');
+
+    const commands = [
+      { cmd: 'pnpm test invoice', agent: 'main', time: '6.1s', exit: '0', exitStyle: `font:500 12px/1 ${MONO};color:#a3a3a3` },
+      { cmd: 'git status --short', agent: 'main', time: '0.2s', exit: '0', exitStyle: `font:500 12px/1 ${MONO};color:#a3a3a3` },
+      { cmd: 'rm -rf dist && pnpm build', agent: 'main', time: '—', exit: 'awaiting you', exitStyle: `font: 500 11px/1 'Geist Mono', ui-monospace, monospace;letter-spacing:0.1em;text-transform:uppercase;color:oklch(0.82 0.11 85)` },
+    ];
+
+    const total = 61.4;
+    const usage = [
+      ['input', 48.2, '48.2k', 1],
+      ['  cached', 31.0, '31.0k', 0.55],
+      ['output', 13.2, '13.2k', 1],
+      ['  reasoning', 4.1, '4.1k', 0.55],
+    ].map(([label, v, value, a]) => ({
+      label: label.trim(), value,
+      barStyle: `display:block;height:8px;border-radius:4px;width:${(v / total * 100).toFixed(1)}%;background:${CX};opacity:${a}`,
+    }));
+
+    return { nav, files, commands, usage };
+  }
+}
+</script>
+</body>
+</html>

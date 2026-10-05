@@ -1,0 +1,21 @@
+.chipstate { display: inline-flex; align-items: center; gap: 8px; min-height: 24px; padding: 0 10px; border: 1px solid var(--border); border-radius: 999px; font: 500 11px/1 var(--mono); letter-spacing: 0.04em; color: var(--muted); white-space: nowrap; }
+.chipstate--installed { color: var(--done); border-color: var(--done); }
+.chipstate--outdated, .chipstate--conflict, .chipstate--unreadable { color: var(--ask); border-color: var(--ask); }
+.setuprow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+.setuprow__text { display: flex; flex-direction: column; gap: 6px; flex: 1 1 360px; min-width: 0; }
+.setuprow__title { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font: 600 14px/1.25 var(--sans); }
+.setuprow__desc { font: 400 12px/1.5 var(--sans); color: var(--muted); max-width: 70ch; text-wrap: pretty; }
+.setuprow__target { font: 400 11.5px/1.4 var(--mono); color: var(--faint); overflow-wrap: anywhere; }
+.setuprow__note { font: 400 12px/1.5 var(--sans); color: var(--ask); }
+.setuprow__actions { display: flex; align-items: center; gap: 8px; }
+.setupresult { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius); font: 400 12.5px/1.5 var(--sans); }
+.setupresult--ok b { color: var(--done); }
+.setupresult--fail { border-color: var(--fail); }
+.setupresult--fail b { color: var(--fail); }
+.setupresult small { color: var(--faint); font: 400 11.5px/1.4 var(--mono); overflow-wrap: anywhere; }
+.banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 14px 18px; }
+.banner__text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.banner__text b { font: 600 14px/1.3 var(--sans); }
+.banner__text span { font: 400 12.5px/1.5 var(--sans); color: var(--muted); max-width: 70ch; }
+.setuprow__brand { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border); background: var(--g-0e); color: var(--muted); }
+.banner__actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

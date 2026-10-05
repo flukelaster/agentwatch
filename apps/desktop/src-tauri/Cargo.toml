@@ -1,0 +1,27 @@
+[package]
+name = "agentwatch-desktop"
+version = "0.1.0"
+description = "AgentWatch: local-only monitor for AI coding agents"
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "agentwatch_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+signal-hook = "0.3"
+libc = "0.2"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

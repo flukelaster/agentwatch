@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentWatch First Launch</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#050505}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #ededed;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 720px; height: 640px; box-sizing: border-box; background: #0b0b0b; border: 1px solid #303030; border-radius: 8px; color: #ededed; font-family: 'Geist', system-ui, sans-serif; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column; overflow: hidden">
+
+<div style="padding: 32px 36px 20px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#f2f2f2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M3.5 10.5h3l1.8-4 3 7 1.7-3h3.5"/></svg>
+<span style="font: 600 13px/1 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.18em">AGENTWATCH</span>
+</div>
+<h1 style="margin: 0; font: 600 30px/1.15 'Geist', system-ui, sans-serif; letter-spacing: -0.02em">Set up AgentWatch</h1>
+<p style="margin: 0; max-width: 560px; font: 400 14px/1.55 'Geist', system-ui, sans-serif; color: #a3a3a3; text-wrap: pretty">See what the AI agents on this Mac are doing, what they just did, and what changed. Nothing leaves your computer and prompts are not stored. Pick what to turn on now.</p>
+</div>
+
+<fieldset style="flex: 1; margin: 0; border: 0; padding: 0 36px; display: flex; flex-direction: column; gap: 10px; min-width: 0">
+<legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Setup options</legend>
+<sc-for list="{{opts}}" as="o" hint-placeholder-count="4">
+<div style="{{o.rowStyle}}">
+<input id="{{o.id}}" type="checkbox" checked="{{o.checked}}" onChange="{{o.toggle}}" style="flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: #ededed; cursor: pointer">
+<label for="{{o.id}}" style="display: flex; flex-direction: column; gap: 6px; cursor: pointer; flex: 1; min-width: 0">
+<span style="font: 600 15px/1.2 'Geist', system-ui, sans-serif">{{o.label}}</span>
+<span style="font: 400 13px/1.5 Geist, system-ui, sans-serif; color: #a3a3a3; text-wrap: pretty">{{o.desc}}</span>
+</label>
+</div>
+</sc-for>
+</fieldset>
+
+<div style="padding: 20px 36px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; border-top: 1px solid #202020; margin-top: 16px">
+<span style="display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1.5 Geist, system-ui, sans-serif; color: #858585">
+<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>
+Change any of this later in Settings.
+</span>
+<div style="display: flex; align-items: center; gap: 10px">
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 16px; border-radius: 4px; color: #a3a3a3; text-decoration: none; font: 600 13px/1 'Geist', system-ui, sans-serif">Skip for now</a>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 20px; border-radius: 4px; background: #f2f2f2; color: #050505; text-decoration: none; font: 600 13px/1 'Geist', system-ui, sans-serif">{{finish}}</a>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":640}}'>
+class Component extends DCLogic {
+  state = { picked: [] };
+
+  renderVals() {
+    const list = [
+      ['login', 'Start monitoring at login', 'Runs in the background after you sign in, as a LaunchAgent for your user only.'],
+      ['cli', 'Install the AgentWatch command', 'Adds agentwatch to your PATH so you can start any agent with full monitoring.'],
+      ['claude', 'Enable Claude Code integration', 'Lets AgentWatch receive Claude Code session, tool and subagent events through hooks.'],
+      ['codex', 'Enable Codex integration', 'Lets AgentWatch observe Codex sessions through hooks and, when it launches Codex, the App Server.'],
+    ];
+    const opts = list.map(([id, label, desc]) => {
+      const checked = this.state.picked.indexOf(id) > -1;
+      return {
+        id, label, desc, checked,
+        toggle: () => this.setState({ picked: checked ? this.state.picked.filter((x) => x !== id) : this.state.picked.concat([id]) }),
+        rowStyle: `display:flex;align-items:flex-start;gap:14px;box-sizing:border-box;padding:14px 16px;border-radius:4px;border:1px solid ${checked ? '#4a4a4a' : '#202020'};background:${checked ? '#131313' : 'transparent'}`,
+      };
+    });
+    const n = this.state.picked.length;
+    return { opts, finish: n ? 'Finish setup (' + n + ')' : 'Finish setup' };
+  }
+}
+</script>
+</body>
+</html>
