@@ -82,23 +82,26 @@ try {
     writeFileSync(join(out, `${name}.png`), Buffer.from(data, "base64"));
     console.log(`wrote docs/images/${name}.png (${width}x${height} @2x)`);
   };
-  const open = async (query, hash, width, height) => {
+  // The demo data always has an approval open, which would put the yellow frame glow on every picture. Only the picture
+  // that is about the glow keeps it.
+  const hideGlow = (on) => cdp.eval(`(() => { document.getElementById("no-attn")?.remove(); if (${on}) { const s = document.createElement("style"); s.id = "no-attn"; s.textContent = ".attn{display:none!important}"; document.head.append(s); } })()`);
+  const open = async (query, hash, width, height, { glow = false } = {}) => {
     await cdp.send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 2, mobile: false });
     await cdp.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "dark" }] });
     await cdp.send("Page.navigate", { url: `http://127.0.0.1:${PORT}/?mock=1${query}${hash}` });
     await sleep(1800);
+    await hideGlow(!glow);
+    await sleep(300);
   };
   const click = (text, role) => cdp.eval(`(() => { const el = [...document.querySelectorAll('${role}')].find((e) => e.textContent.includes(${JSON.stringify(text)})); if (!el) return false; el.click(); return true; })()`);
 
   // 1. the Running tab: stats, context window, the agent graph (without the approval glow the demo data would add)
   await open("&tokens=1&reported=1", "", 1440, 1180);
   await click("Not now", "button"); // the "connect your agents" notice is not what this picture is about
-  await cdp.eval(`(() => { const s = document.createElement("style"); s.id = "no-attn"; s.textContent = ".attn{display:none!important}"; document.head.append(s); })()`);
-  await sleep(500);
   await shot("overview", 1440, 1180);
 
   // 2. a session asks for approval: the window glows
-  await cdp.eval(`document.getElementById("no-attn")?.remove()`);
+  await hideGlow(false);
   await click("Needs you", '[role="tab"]');
   await sleep(1500);
   await shot("approval", 1440, 900);
