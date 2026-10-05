@@ -1,6 +1,6 @@
 [package]
 name = "agentwatch-desktop"
-version = "0.1.0"
+version = "0.1.1"
 description = "AgentWatch: local-only monitor for AI coding agents"
 edition = "2021"
 rust-version = "1.77"
