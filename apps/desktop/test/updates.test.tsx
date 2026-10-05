@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { UpdateBanner, UpdatesPanel } from "../src/components/Updates";
+import { UpdateBanner, UpdateModal, UpdatesPanel } from "../src/components/Updates";
 import { DaemonProvider } from "../src/lib/context";
 import { MockDaemonClient } from "../src/lib/mock";
 import { LiveStore } from "../src/lib/store";
@@ -43,23 +43,18 @@ describe("updates", () => {
       await new Promise<void>((r) => (finish = r));
     });
     check.mockResolvedValue({ version: "0.2.0", body: "Fixes the approval glow", downloadAndInstall });
-    render(
-      <>
-        <UpdateBanner />
-        <UpdatesPanel />
-      </>,
-    );
+    render(<UpdatesPanel />);
     fireEvent.click(screen.getByRole("button", { name: "Check for updates" }));
-    expect((await screen.findAllByText("Version 0.2.0 is available.")).length).toBe(2);
+    await screen.findByText("Version 0.2.0 is available.");
     expect(screen.getByText("Fixes the approval glow")).toBeTruthy();
 
-    fireEvent.click(screen.getAllByRole("button", { name: /Install/ })[0]!);
-    await waitFor(() => expect(screen.getAllByText("Downloading 0.2.0… 40%").length).toBeGreaterThan(0));
+    fireEvent.click(screen.getByRole("button", { name: /Install/ }));
+    await screen.findByText("Downloading 0.2.0… 40%");
     finish();
-    await waitFor(() => expect(screen.getAllByText(/is installed\. Restart AgentWatch/).length).toBeGreaterThan(0));
+    await screen.findByText(/is installed\. Restart AgentWatch/);
     expect(invoke).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getAllByRole("button", { name: "Restart now" })[0]!);
+    fireEvent.click(screen.getByRole("button", { name: "Restart now" }));
     await waitFor(() => expect(invoke).toHaveBeenCalledWith("relaunch"));
   });
 
@@ -107,5 +102,36 @@ describe("updates", () => {
     await screen.findByText("Version 0.2.0 is available.");
     expect(check).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(window.location.hash).toBe("#/settings"));
+  });
+
+  it("pops up when a newer version is found, shows what is new, and Later hands over to the banner", async () => {
+    check.mockResolvedValue({ version: "0.2.0", body: "- Fixes the approval glow", downloadAndInstall: vi.fn() });
+    render(
+      <>
+        <UpdateModal />
+        <UpdateBanner />
+      </>,
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+    await checkForUpdate();
+    const dialog = await screen.findByRole("dialog");
+    expect(dialog.textContent).toContain("Version 0.2.0");
+    expect(dialog.textContent).toContain("you have 0.1.0");
+    expect(dialog.textContent).toContain("Fixes the approval glow");
+    expect(screen.queryByRole("status", { name: "Update" })).toBeNull(); // no banner while the pop-up is open
+
+    fireEvent.keyDown(window, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(screen.getByRole("status", { name: "Update" })).toBeTruthy();
+  });
+
+  it("Update now downloads, installs and restarts without another click", async () => {
+    const downloadAndInstall = vi.fn(async () => undefined);
+    check.mockResolvedValue({ version: "0.2.0", downloadAndInstall });
+    render(<UpdateModal />);
+    await checkForUpdate();
+    fireEvent.click(await screen.findByRole("button", { name: "Update now" }));
+    await waitFor(() => expect(invoke).toHaveBeenCalledWith("relaunch"));
+    expect(downloadAndInstall).toHaveBeenCalledTimes(1);
   });
 });

@@ -7,6 +7,14 @@
 **Mission control for the AI coding agents on your Mac.**<br/>
 See what every agent is doing right now, what it just did, what changed, and the moment one of them needs you.
 
+<br/>
+
+<a href="https://github.com/flukelaster/agentwatch/releases/latest/download/AgentWatch_aarch64.dmg"><img src="https://img.shields.io/badge/Download%20for%20Apple%20Silicon-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download AgentWatch for Apple Silicon" height="52" /></a>&nbsp;&nbsp;<a href="https://github.com/flukelaster/agentwatch/releases/latest/download/AgentWatch_x64.dmg"><img src="https://img.shields.io/badge/Download%20for%20Intel-3a3a3a?style=for-the-badge&logo=apple&logoColor=white" alt="Download AgentWatch for Intel" height="52" /></a>
+
+<sub>Free · macOS 12 or later · <a href="https://github.com/flukelaster/agentwatch/releases/latest">all releases</a> · updates itself</sub>
+
+<br/>
+
 ![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20%7C%20Intel-black?logo=apple)
 ![Tauri 2](https://img.shields.io/badge/Tauri-2-24C8DB?logo=tauri&logoColor=white)
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
@@ -83,14 +91,19 @@ Details are under [Privacy, as enforced in code](#privacy-as-enforced-in-code).
 
 ## Download
 
-Get the latest `.dmg` from [Releases](https://github.com/flukelaster/agentwatch/releases/latest): `AgentWatch_<version>_aarch64.dmg` for Apple
-Silicon, `AgentWatch_<version>_x64.dmg` for Intel. Drag AgentWatch to Applications, open it, press **Set up**.
+**[⬇ Download for Apple Silicon](https://github.com/flukelaster/agentwatch/releases/latest/download/AgentWatch_aarch64.dmg)** ·
+**[⬇ Download for Intel](https://github.com/flukelaster/agentwatch/releases/latest/download/AgentWatch_x64.dmg)** ·
+[all releases](https://github.com/flukelaster/agentwatch/releases/latest)
+
+Open the `.dmg`, drag AgentWatch to Applications, open it, press **Set up**. Not sure which Mac you have? Apple menu →
+About This Mac: "Chip: Apple M…" is Apple Silicon, "Processor: Intel" is Intel.
 
 The app is **ad-hoc signed, not notarised**, so the first launch is blocked by Gatekeeper. Right-click the app → **Open** → **Open**,
 or run `xattr -dr com.apple.quarantine /Applications/AgentWatch.app` once.
 
-**Updates are automatic.** The dashboard looks for a newer build shortly after it opens and every few hours after that, and
-**Settings → Updates** has a *Check for updates* button. An update is downloaded from GitHub Releases and installed only if its
+**Updates are automatic.** The dashboard looks for a newer build shortly after it opens and every few hours after that, and a pop-up
+shows what is new with **Update now** (AgentWatch restarts; your agents keep running). You can also use *AgentWatch → Check for
+Updates…*, the same item in the menu-bar menu, or **Settings → Updates**. An update is downloaded from GitHub Releases and installed only if its
 signature matches the key built into the app; nothing about you or your sessions is sent. Turn the automatic check off in the same place.
 Updates install without the Gatekeeper prompt, so only the very first install needs the step above.
 

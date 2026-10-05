@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import "../styles/updates.css";
 import { Panel } from "./ui";
-import { appVersion, autoCheckEnabled, checkForUpdate, installUpdate, relaunchApp, setAutoCheck, useUpdateState } from "../lib/updater";
+import { appVersion, autoCheckEnabled, checkForUpdate, dismissUpdate, installAndRestart, installUpdate, relaunchApp, setAutoCheck, useUpdateState } from "../lib/updater";
 
 function statusText(u: ReturnType<typeof useUpdateState>): string {
   switch (u.phase) {
@@ -83,10 +84,11 @@ export function UpdatesPanel() {
   );
 }
 
-/** A one-line notice above the page when a newer build is waiting. */
+/** A one-line notice above the page for a newer build whose pop-up was closed with "Later". */
 export function UpdateBanner() {
   const u = useUpdateState();
   if (u.phase !== "available" && u.phase !== "ready" && u.phase !== "downloading") return null;
+  if (u.dismissed !== u.version) return null;
   return (
     <section className="panel" role="status" aria-label="Update">
       <div className="callout" style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", gap: 16 }}>
@@ -103,5 +105,64 @@ export function UpdateBanner() {
         )}
       </div>
     </section>
+  );
+}
+
+/**
+ * The pop-up that appears over the dashboard when a newer build is waiting: what version, what changed, and one button.
+ * "Later" closes it for this version until the next launch (the banner above the page stays); updating restarts AgentWatch,
+ * never the agents it watches.
+ */
+export function UpdateModal() {
+  const u = useUpdateState();
+  const [current, setCurrent] = useState<string | undefined>();
+  const primary = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    void appVersion().then(setCurrent);
+  }, []);
+  const open = (u.phase === "available" || u.phase === "downloading" || u.phase === "ready") && u.version !== undefined && u.dismissed !== u.version;
+  useEffect(() => {
+    if (!open) return;
+    primary.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dismissUpdate();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+  if (!open) return null;
+  const working = u.phase === "downloading" || u.phase === "ready";
+  return (
+    <div className="upd-backdrop">
+      <div className="upd" role="dialog" aria-modal="true" aria-labelledby="upd-title">
+        <h2 id="upd-title" className="upd__title">
+          A new version of AgentWatch is available
+        </h2>
+        <p className="upd__ver">
+          <b>Version {u.version}</b>
+          {current ? <span> · you have {current}</span> : null}
+        </p>
+        {u.notes && (
+          <div className="upd__notes">
+            <span className="upd__label">WHAT'S NEW</span>
+            <pre>{u.notes}</pre>
+          </div>
+        )}
+        <p className="upd__hint">AgentWatch restarts to finish. Your agents keep running; sessions are picked up again in a few seconds.</p>
+        {working && (
+          <div className="upd__bar" role="progressbar" aria-label="Update progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={u.progress === undefined ? undefined : Math.round(u.progress * 100)}>
+            <span style={{ width: `${Math.round((u.progress ?? (u.phase === "ready" ? 1 : 0.05)) * 100)}%` }} />
+          </div>
+        )}
+        <div className="upd__actions">
+          <button type="button" className="btn" onClick={dismissUpdate}>
+            Later
+          </button>
+          <button ref={primary} type="button" className="btn btn--primary" disabled={working} onClick={() => void installAndRestart()}>
+            {u.phase === "ready" ? "Restarting…" : u.phase === "downloading" ? (u.progress === undefined ? "Downloading…" : `Downloading… ${Math.round(u.progress * 100)}%`) : "Update now"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

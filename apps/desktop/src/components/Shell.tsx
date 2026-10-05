@@ -4,7 +4,7 @@ import { pendingRequests, runningCount } from "../lib/store";
 import { href, useRoute } from "../lib/router";
 import type { Settings } from "@agentwatch/protocol";
 import { Dot, Icon, LockIcon, Logo, NAV } from "./ui";
-import { UpdateBanner } from "./Updates";
+import { UpdateBanner, UpdateModal } from "./Updates";
 import { startAutoCheck } from "../lib/updater";
 
 function activeFor(path: string, current: string): boolean {
@@ -43,6 +43,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="app" data-attention={waiting > 0 ? "1" : undefined}>
+      <UpdateModal />
       {waiting > 0 && <div key={flash} className="attn" aria-hidden="true" />}
       <header className="topbar">
         <a className="brand" href={href("/")}>

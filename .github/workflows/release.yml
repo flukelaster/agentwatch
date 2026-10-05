@@ -65,6 +65,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the notes are the commit subjects since the previous release
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -78,6 +80,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           version="${GITHUB_REF_NAME#v}"
-          node scripts/make-latest-json.mjs dist "$version" "$GITHUB_REPOSITORY"
+          # What's new: one line per commit since the previous release tag (shown in the app's update pop-up and on the Release)
+          prev="$(git describe --tags --abbrev=0 --match 'v*' "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
+          range="${prev:+$prev..}${GITHUB_REF_NAME}"
+          git log --no-merges --pretty='- %s' "$range" > notes.md
+          [ -s notes.md ] || echo "- Maintenance release" > notes.md
+          cat notes.md
+          node scripts/make-latest-json.mjs dist "$version" "$GITHUB_REPOSITORY" notes.md
+          # Permanent download links that do not carry a version: releases/latest/download/AgentWatch_aarch64.dmg
+          cp "dist/AgentWatch_${version}_aarch64.dmg" dist/AgentWatch_aarch64.dmg
+          cp "dist/AgentWatch_${version}_x64.dmg" dist/AgentWatch_x64.dmg
           ls -l dist
-          gh release create "$GITHUB_REF_NAME" dist/* --title "AgentWatch $version" --generate-notes
+          gh release create "$GITHUB_REF_NAME" dist/* --title "AgentWatch $version" --notes-file notes.md

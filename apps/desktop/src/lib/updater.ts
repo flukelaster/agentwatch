@@ -18,6 +18,8 @@ export interface UpdateState {
   progress?: number;
   error?: string;
   checkedAt?: number;
+  /** The version whose pop-up the person closed with "Later". Asked again after a restart or when a newer one appears. */
+  dismissed?: string;
 }
 
 const AUTO_KEY = "agentwatch.autoUpdateCheck";
@@ -124,6 +126,16 @@ export async function installUpdate(): Promise<void> {
   } catch (e) {
     set({ phase: "error", error: e instanceof Error ? e.message : String(e) });
   }
+}
+
+/** Download, install and restart in one go: what "Update now" in the pop-up means. */
+export async function installAndRestart(): Promise<void> {
+  await installUpdate();
+  if (state.phase === "ready") await relaunchApp();
+}
+
+export function dismissUpdate(): void {
+  if (state.version) set({ dismissed: state.version });
 }
 
 /** Start the new build. The shell stops the daemon first, then restarts the app. */
