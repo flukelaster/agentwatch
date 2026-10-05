@@ -1,6 +1,10 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { UpdateBanner, UpdatesPanel } from "../src/components/Updates";
+import { DaemonProvider } from "../src/lib/context";
+import { MockDaemonClient } from "../src/lib/mock";
+import { LiveStore } from "../src/lib/store";
+import { Settings } from "../src/pages/Settings";
 import { checkForUpdate, installUpdate, resetUpdaterForTests, setAutoCheck, startAutoCheck } from "../src/lib/updater";
 
 vi.mock("../src/lib/native", () => ({ isTauri: () => true, saveTextFile: vi.fn(), openDashboard: vi.fn() }));
@@ -89,5 +93,19 @@ describe("updates", () => {
     expect(invoke).not.toHaveBeenCalled();
     await checkForUpdate();
     expect(check).toHaveBeenCalled();
+  });
+
+  it("the app menu's Check for Updates… opens Settings with ?check=1: it looks at once and clears the flag", async () => {
+    check.mockResolvedValue({ version: "0.2.0", downloadAndInstall: vi.fn() });
+    window.location.hash = "#/settings?check=1";
+    const store = new LiveStore();
+    render(
+      <DaemonProvider daemon={{ store, client: new MockDaemonClient(store, { live: false }) }}>
+        <Settings />
+      </DaemonProvider>,
+    );
+    await screen.findByText("Version 0.2.0 is available.");
+    expect(check).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(window.location.hash).toBe("#/settings"));
   });
 });

@@ -19,7 +19,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use tauri::image::Image;
-use tauri::menu::{Menu, MenuItem};
+use tauri::menu::{Menu, MenuItem, MenuItemKind};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{AppHandle, Manager, PhysicalPosition, Position, RunEvent, WebviewWindow, WebviewWindowBuilder, WindowEvent};
 
@@ -393,6 +393,23 @@ fn show_popover_at_corner(app: &AppHandle) {
     let _ = w.set_focus();
 }
 
+const CHECK_UPDATES_ID: &str = "check_updates";
+
+/// "Check for Updates…" opens Settings, which looks for a newer build and shows the answer there.
+fn open_update_check(app: &AppHandle) {
+    let _ = show_main(app, Some("/settings?check=1"));
+}
+
+/// The standard macOS application menu with "Check for Updates…" right under "About AgentWatch".
+fn app_menu(app: &AppHandle) -> tauri::Result<Menu<tauri::Wry>> {
+    let menu = Menu::default(app)?;
+    if let Some(MenuItemKind::Submenu(application)) = menu.items()?.into_iter().next() {
+        let item = MenuItem::with_id(app, CHECK_UPDATES_ID, "Check for Updates…", true, None::<&str>)?;
+        application.insert(&item, 1)?;
+    }
+    Ok(menu)
+}
+
 fn quit(app: &AppHandle) {
     QUITTING.store(true, Ordering::Relaxed);
     stop_daemon(app);
@@ -406,8 +423,14 @@ pub fn run() {
         .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(DaemonChild::default())
         .invoke_handler(tauri::generate_handler![mint_capability, show_main_window, relaunch])
+        .on_menu_event(|app, event| {
+            if event.id().as_ref() == CHECK_UPDATES_ID {
+                open_update_check(app);
+            }
+        })
         .setup(move |app| {
             let handle = app.handle().clone();
+            app.set_menu(app_menu(&handle)?)?;
             // `kill`, a logout or a shutdown send SIGTERM: stop the daemon properly instead of just dying.
             let term = Arc::new(AtomicBool::new(false));
             for sig in [signal_hook::consts::SIGTERM, signal_hook::consts::SIGINT] {
@@ -425,8 +448,9 @@ pub fn run() {
             supervise_daemon(handle.clone());
 
             let open = MenuItem::with_id(app, "open", "Open dashboard", true, None::<&str>)?;
+            let updates = MenuItem::with_id(app, CHECK_UPDATES_ID, "Check for Updates…", true, None::<&str>)?;
             let quit_item = MenuItem::with_id(app, "quit", "Quit AgentWatch", true, None::<&str>)?;
-            let menu = Menu::with_items(app, &[&open, &quit_item])?;
+            let menu = Menu::with_items(app, &[&open, &updates, &quit_item])?;
             // Template icon: black on transparent, so macOS can tint it for light and dark menu bars.
             let icon = Image::from_bytes(include_bytes!("../icons/tray.png"))?;
             TrayIconBuilder::with_id(TRAY_ID)
@@ -439,6 +463,7 @@ pub fn run() {
                     "open" => {
                         let _ = show_main(app, None);
                     }
+                    CHECK_UPDATES_ID => open_update_check(app),
                     "quit" => quit(app),
                     _ => {}
                 })

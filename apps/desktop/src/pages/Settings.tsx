@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import type { Settings as SettingsData } from "@agentwatch/protocol";
 import { PageHead, Panel } from "../components/ui";
 import { ResultList, SetupRow } from "../components/Setup";
@@ -7,6 +7,8 @@ import { itemInfos, useSetup } from "../lib/setup";
 import { useDaemon, useLive, useQuery } from "../lib/context";
 import { isTauri, saveTextFile } from "../lib/native";
 import { UpdatesPanel } from "../components/Updates";
+import { checkForUpdate } from "../lib/updater";
+import { useRoute } from "../lib/router";
 import type { LogsResult } from "../lib/types";
 import { buildDiagnosticsBundle, exportFilename } from "./Logs";
 import "../styles/settings.css";
@@ -66,6 +68,7 @@ export function Settings() {
   const { client } = useDaemon();
   const setup = useSetup();
   const live = useLive();
+  const route = useRoute();
   const q = useQuery<SettingsData>("settings", undefined, { live: false });
   const [pending, setPending] = useState<Partial<SettingsData>>({});
   const [committed, setCommitted] = useState<Partial<SettingsData>>({});
@@ -125,6 +128,15 @@ export function Settings() {
     }
   };
 
+  // "Check for Updates…" in the app or tray menu opens #/settings?check=1: look now, show the answer, and drop the flag
+  const wantsCheck = route.query.get("check") === "1";
+  useEffect(() => {
+    if (!wantsCheck) return;
+    window.location.hash = "#/settings";
+    void checkForUpdate();
+    document.getElementById("updates")?.scrollIntoView?.({ block: "start" });
+  }, [wantsCheck]);
+
   const ready = !!s;
   const sw = (key: WritableKey, label: string) => <Switch label={label} on={!!s?.[key]} disabled={!ready} onChange={(v) => void save(key, v, label)} />;
 
@@ -158,7 +170,11 @@ export function Settings() {
           <ThemePicker />
         </Panel>
 
-        {isTauri() && <UpdatesPanel />}
+        {isTauri() && (
+          <div id="updates">
+            <UpdatesPanel />
+          </div>
+        )}
 
         <Panel title="PRIVACY" right={<span className="group-note">what gets written to disk</span>}>
           <Row
