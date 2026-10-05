@@ -510,6 +510,8 @@ export class SessionManager extends EventEmitter {
             r.resolvedAt = e.occurredAt;
             touched.requests.add(r);
           }
+          // an agent whose own questions are all closed is no longer waiting on anyone, even if another agent still is
+          if (!session.endedAt && agent.status === "waiting" && !this.pendingFor(session.id).some((r) => r.agentId === agent.id)) agent.status = "idle";
           // The main turn ended, but a background subagent may still be working ("waiting for 1 background agent"):
           // the session is then still running.
           const busy = [...this.agents.values()].some((a) => a.sessionId === session.id && a.id !== agent.id && a.status === "running");
@@ -652,12 +654,13 @@ export class SessionManager extends EventEmitter {
         break;
     }
 
-    // Waiting state follows the pending set.
-    if (!session.endedAt && session.status === "waiting" && this.pendingFor(session.id).length === 0) {
-      session.status = "running";
+    // Waiting state follows the pending set: an agent only reads as waiting while a question of its own is open.
+    // (A denied or interrupted question leaves no answer event, so the session can move on while its agent still says waiting.)
+    if (!session.endedAt) {
+      if (session.status === "waiting" && this.pendingFor(session.id).length === 0) session.status = "running";
       for (const a of this.agents.values()) {
-        if (a.sessionId === session.id && a.status === "waiting") {
-          a.status = "running";
+        if (a.sessionId === session.id && a.status === "waiting" && !this.pendingFor(session.id).some((r) => r.agentId === a.id)) {
+          a.status = session.status === "idle" ? "idle" : "running";
           touched.agents.add(a);
         }
       }

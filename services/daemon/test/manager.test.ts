@@ -258,6 +258,21 @@ describe("pending approvals that never get an answer event", () => {
     expect(status(m)).toBe("idle");
   });
 
+  const mainAgent = (m: SessionManager) => [...m.agents.values()].find((a) => a.id.endsWith(":main"))!;
+
+  it("the agent stops reading as waiting once its question is denied (Esc) or answered", () => {
+    const m = new SessionManager(new Store(":memory:"));
+    ask(m);
+    expect(mainAgent(m).status).toBe("waiting");
+    m.ingest(ev("status.changed", { status: "idle", label: "turn finished" }));
+    expect(mainAgent(m).status).toBe("idle");
+
+    const n = new SessionManager(new Store(":memory:"));
+    ask(n);
+    n.ingest(ev("tool.completed", { toolName: "AskUserQuestion", toolUseId: "toolu_1" }));
+    expect(mainAgent(n).status).toBe("running");
+  });
+
   it("measures the silence of the provider, not of the observers that keep reporting git and file changes", () => {
     let clock = new Date("2026-01-01T00:00:00Z");
     const m = new SessionManager(new Store(":memory:"), { now: () => clock });
