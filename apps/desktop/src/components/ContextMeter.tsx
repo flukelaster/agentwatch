@@ -1,5 +1,5 @@
 import type { SessionView } from "@agentwatch/protocol";
-import { tokens } from "../lib/format";
+import { readsContext, tokens } from "../lib/format";
 
 /** The meter in the stats row asks the graph panel to open its Context tab. */
 export const OPEN_CONTEXT_EVENT = "aw:open-context";
@@ -14,7 +14,7 @@ export function contextLevel(used: number, window: number): "ok" | "warn" | "cri
 export function ContextMeter({ session, tracking }: { session: SessionView; tracking?: boolean }) {
   const c = session.usage?.context;
   if (!c) {
-    const why = session.provider !== "claude-code" ? "not reported" : tracking === false ? "tracking off" : "not read yet";
+    const why = !readsContext(session.provider) ? "not reported" : tracking === false ? "tracking off" : "not read yet";
     return (
       <div className="stat ctx">
         <span className="label">Context</span>

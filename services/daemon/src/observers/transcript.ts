@@ -1,8 +1,9 @@
 import { closeSync, openSync, readSync, realpathSync, statSync, watch, type FSWatcher } from "node:fs";
 import { homedir } from "node:os";
-import { join, sep } from "node:path";
+import { basename, join, sep } from "node:path";
 import type { SessionView } from "@agentwatch/protocol";
 import type { Diagnostics } from "../diagnostics";
+import { CodexContextTracker, isCodexRollout } from "./codex-rollout";
 import type { SessionManager } from "../session-manager";
 
 /**
@@ -332,6 +333,8 @@ interface Tail {
   backlog: Array<Extract<ParsedLine, { kind: "message" }>>;
   usage: Map<string, UsageLine>;
   ctx: ContextTracker;
+  /** A Codex session file is read for tokens and context only, by this instead of `ctx`. */
+  codex?: CodexContextTracker;
   usageDirty: boolean;
   usageSentAt: number;
   nextAt: number;
@@ -350,6 +353,8 @@ export interface TranscriptOptions {
 }
 
 const MAX_READ = 4_000_000;
+/** A Codex file is read whole to find its first request, and is mostly lines that are only measured: read it in bigger bites. */
+const MAX_READ_CODEX = 16_000_000;
 const USAGE_EVERY_MS = 3000;
 
 export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => void; refresh: () => void } {
@@ -358,6 +363,8 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
   const backlogBytes = opts.backlogBytes ?? 400_000;
   const backlogMessages = opts.backlogMessages ?? 30;
   const tails = new Map<string, Tail>();
+  /** Codex sessions already reported as having no session file, so that is said once. */
+  const noPath = new Set<string>();
   const MAX_WATCHED = 16;
   let wake: ReturnType<typeof setTimeout> | undefined;
   const closeTail = (id: string) => {
@@ -383,6 +390,16 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
     }
   };
 
+  /** A Codex session file lives under whatever CODEX_HOME the launcher chose, so it is recognised by its shape, not its place. */
+  const allowedCodex = (path: string): string | undefined => {
+    try {
+      const real = realpathSync(path);
+      return isCodexRollout(real) ? real : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
   /** New complete lines since the last read, and whether that reached the end of the file. */
   const readNew = (t: Tail, full: boolean): { text: string; atEnd: boolean } | undefined => {
     let size: number;
@@ -401,7 +418,7 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
       t.rest = "";
     }
     if (size === t.offset) return { text: "", atEnd: true };
-    const len = Math.min(size - t.offset, MAX_READ);
+    const len = Math.min(size - t.offset, t.codex ? MAX_READ_CODEX : MAX_READ);
     const buf = Buffer.alloc(len);
     const fd = openSync(t.path, "r");
     try {
@@ -435,7 +452,8 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
     if (!t.usageDirty || t.scanning || now - t.usageSentAt < USAGE_EVERY_MS) return;
     t.usageDirty = false;
     t.usageSentAt = now;
-    const c = t.ctx.snapshot(manager.contentPolicy().window);
+    // Codex states its window itself, so the pin in Settings (for Claude Code, which never does) does not apply to it
+    const c = t.codex ? t.codex.snapshot() : t.ctx.snapshot(manager.contentPolicy().window);
     manager.apply({
       provider: s.provider,
       providerSessionId: s.providerSessionId!,
@@ -445,7 +463,7 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
       payload: {
         scope: "session",
         providerReported: true,
-        ...totalUsage(t.usage),
+        ...(t.codex ? t.codex.totals() : totalUsage(t.usage)),
         ...(c
           ? {
               contextUsed: c.used,
@@ -470,14 +488,27 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
     }
     const now = Date.now();
     for (const s of manager.sessions.values()) {
-      if (s.provider !== "claude-code" || s.endedAt || !s.providerSessionId) continue;
+      if ((s.provider !== "claude-code" && s.provider !== "codex") || s.endedAt || !s.providerSessionId) continue;
+      const isCodex = s.provider === "codex";
+      if (isCodex && !policy.tokens) {
+        closeTail(s.id); // Codex is read for token counts only: with tracking off there is nothing to read
+        continue;
+      }
       const wanted = manager.transcriptFor(s.id);
-      if (!wanted) continue;
+      if (!wanted) {
+        // the hook says where the session file is; if it never does, this line is how to tell
+        if (isCodex && !noPath.has(s.id) && now - Date.parse(s.startedAt) > 30_000) {
+          noPath.add(s.id);
+          diagnostics.info("observer.context", "a codex session has not reported where its session file is, so its context cannot be read");
+        }
+        continue;
+      }
       let t = tails.get(s.id);
       if (!t) {
-        const path = allowed(wanted);
+        const path = isCodex ? allowedCodex(wanted) : allowed(wanted);
         if (!path) continue;
-        t = { path, offset: 0, rest: "", seen: manager.messageIds(s.id), first: true, midFile: false, scanning: true, backlog: [], usage: new Map(), ctx: new ContextTracker(), usageDirty: false, usageSentAt: 0, nextAt: 0 };
+        t = { path, offset: 0, rest: "", seen: manager.messageIds(s.id), first: true, midFile: false, scanning: true, backlog: [], usage: new Map(), ctx: new ContextTracker(), ...(isCodex ? { codex: new CodexContextTracker() } : {}), usageDirty: false, usageSentAt: 0, nextAt: 0 };
+        if (isCodex) diagnostics.info("observer.context", `reading the context of a codex session from ${basename(path)}`);
         // A change to the file wakes the reader at once, so a prompt or reply shows up as it is written instead of at the next poll.
         if (tails.size < MAX_WATCHED) {
           try {
@@ -519,6 +550,11 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
         t.midFile = false;
         let interruptedAt: string | undefined;
         for (const line of lines) {
+          if (t.codex) {
+            // a Codex line is classified by its first characters and parsed only when it is a token count
+            if (t.codex.feedLine(line)) t.usageDirty = true;
+            continue;
+          }
           const o = lineObject(line);
           if (!o) continue;
           const stopped = interruptionOf(o);

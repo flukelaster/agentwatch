@@ -76,6 +76,9 @@ export function agentName(a: Pick<AgentView, "displayName" | "role" | "providerA
   return ordinal ? `subagent ${ordinal}` : "subagent";
 }
 
+/** Tools whose context window AgentWatch can read: Claude Code from its conversation file, Codex from its session file. */
+export const readsContext = (provider: string): boolean => provider === "claude-code" || provider === "codex";
+
 export const providerLabel: Record<string, string> = { "claude-code": "Claude Code", codex: "Codex", "gemini-cli": "Gemini CLI", antigravity: "Antigravity CLI", cursor: "Cursor", generic: "Generic CLI" };
 
 export function tokens(n: number | undefined): string {

@@ -179,7 +179,7 @@ export function Settings() {
         <Panel title="PRIVACY" right={<span className="group-note">what gets written to disk</span>}>
           <Row
             label="Track token usage"
-            desc="Records how many tokens each Claude Code session has used (fresh input, output and cache). AgentWatch reads only the token counts from Claude Code's conversation file; not a word of the conversation is kept. On by default; turn it off to stop reading the file for this."
+            desc="Records how many tokens each Claude Code or Codex session has used, and how full its context window is. AgentWatch reads only the token counts from Claude Code's conversation file or Codex's session file; not a word of the conversation is kept. On by default; turn it off to stop reading the files for this."
             control={sw("trackTokenUsage", "Track token usage")}
           />
           <Row
@@ -218,7 +218,7 @@ export function Settings() {
           />
           <Row
             label="Context window size"
-            desc="Claude Code does not say how big a session's context window is, so the Context meter works it out from the largest context it has seen. If that is wrong for your model, choose the size here."
+            desc="Claude Code does not say how big a session's context window is, so the Context meter works it out from the largest context it has seen. If that is wrong for your model, choose the size here. Codex states its own window, so this applies to Claude Code only."
             control={
               <div className="seg" role="group" aria-label="Context window size">
                 {CONTEXT_WINDOWS.map((w) => (

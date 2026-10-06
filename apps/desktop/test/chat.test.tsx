@@ -357,6 +357,8 @@ describe("the context window meter", () => {
     rerender(<ContextMeter session={session()} tracking={false} />);
     expect(screen.getByText("tracking off")).toBeTruthy();
     rerender(<ContextMeter session={session({ provider: "codex" })} tracking={false} />);
+    expect(screen.getByText("tracking off")).toBeTruthy(); // Codex is read like Claude Code
+    rerender(<ContextMeter session={session({ provider: "gemini-cli" })} tracking={false} />);
     expect(screen.getByText("not reported")).toBeTruthy();
     expect(screen.queryByRole("meter")).toBeNull();
   });
@@ -426,8 +428,26 @@ describe("the context grid", () => {
     expect(screen.getByText("The context window has not been read yet")).toBeTruthy();
     rerender(<ContextPanel session={session()} tracking={false} />);
     expect(screen.getByRole("link", { name: "Open Settings" }).getAttribute("href")).toBe("#/settings");
+    // each tool says what is true of it: Codex is read like Claude Code, the others are not read at all
     rerender(<ContextPanel session={session({ provider: "codex" })} />);
-    expect(screen.getByText("Context is only shown for Claude Code")).toBeTruthy();
+    expect(screen.getByText("The context window has not been read yet")).toBeTruthy();
+    expect(screen.getByText(/Codex's session file/)).toBeTruthy();
+    expect(screen.queryByText(/Claude Code/)).toBeNull();
+    rerender(<ContextPanel session={session({ provider: "gemini-cli" })} />);
+    expect(screen.getByText("Context is not shown for Gemini CLI")).toBeTruthy();
+    expect(screen.getByText("Gemini CLI does not tell AgentWatch how full its window is.")).toBeTruthy();
+  });
+
+  it("draws a Codex session's context with Codex's own wording, never Claude Code's", () => {
+    const codex = { used: 39_368, window: 258_400, windowAuto: false, setup: 32_234, conversation: 3_449, tools: 3_685 };
+    const { container } = render(<ContextPanel session={session({ provider: "codex", model: "gpt-6-luna", usage: { scope: "session", providerReported: true, context: codex } })} />);
+    expect(container.querySelectorAll(".ctxp__cell")).toHaveLength(GRID_CELLS);
+    expect(container.textContent).toContain("gpt-6-luna");
+    expect(container.textContent).toContain("(15%)");
+    expect(container.textContent).not.toContain("≈"); // Codex states its window
+    expect(screen.getByText("Estimated usage by category")).toBeTruthy();
+    expect(screen.getByText(/The total and the window size are Codex's own/)).toBeTruthy();
+    expect(container.textContent).not.toMatch(/Claude Code|\/context|Autocompact/);
   });
 
   it("opens from the meter above the graph: a click brings the Context tab back", () => {

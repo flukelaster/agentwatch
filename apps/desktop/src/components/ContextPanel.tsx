@@ -1,25 +1,30 @@
 import { useMemo } from "react";
 import type { SessionView } from "@agentwatch/protocol";
 import { allocateCells, contextParts, GRID_COLUMNS } from "../lib/contextGrid";
-import { tokens } from "../lib/format";
+import { providerLabel, readsContext, tokens } from "../lib/format";
 import { EmptyState } from "./ui";
 import "../styles/context.css";
 
+/** Where each tool's context is read from. A tool that is not listed does not tell AgentWatch how full its window is. */
+const CONTEXT_FILE: Record<string, string> = { "claude-code": "Claude Code's conversation file", codex: "Codex's session file" };
+
 /**
  * The context window as a grid of cells, in the style of Claude Code's `/context`, with the list of what fills it.
- * Claude Code's own breakdown is shown when `/context` has been run in the session; otherwise an estimate.
+ * Claude Code's own breakdown is shown when `/context` has been run in the session; otherwise an estimate. Codex reports the total and the window, and the split is an estimate.
  */
 export function ContextPanel({ session, tracking }: { session: SessionView; tracking?: boolean }) {
   const c = session.usage?.context;
   const parts = useMemo(() => (c ? contextParts(c) : []), [c]);
   const cells = useMemo(() => (c ? allocateCells(parts, c.window) : []), [c, parts]);
+  const name = providerLabel[session.provider] ?? "This tool";
+  const file = readsContext(session.provider) ? CONTEXT_FILE[session.provider] : undefined;
   if (!c) {
     return (
       <EmptyState
         icon="activity"
-        title={session.provider !== "claude-code" ? "Context is only shown for Claude Code" : tracking === false ? "Token tracking is off" : "The context window has not been read yet"}
-        hint={session.provider !== "claude-code" ? "Codex does not report how full its window is." : tracking === false ? "Turn on Track token usage in Settings to see how full the window is." : "It is read from Claude Code's conversation file as soon as this session sends its next message."}
-        action={tracking === false ? { label: "Open Settings", href: "#/settings" } : undefined}
+        title={!file ? `Context is not shown for ${name}` : tracking === false ? "Token tracking is off" : "The context window has not been read yet"}
+        hint={!file ? `${name} does not tell AgentWatch how full its window is.` : tracking === false ? "Turn on Track token usage in Settings to see how full the window is." : `It is read from ${file} as soon as this session makes its next request.`}
+        action={file && tracking === false ? { label: "Open Settings", href: "#/settings" } : undefined}
         compact
       />
     );
@@ -53,9 +58,11 @@ export function ContextPanel({ session, tracking }: { session: SessionView; trac
           ))}
         </ul>
         <p className="ctxp__note">
-          {c.reported
-            ? "Claude Code's own breakdown from the last /context run, plus what was added since (counted as messages). The window size is the one Claude Code reported."
-            : `The total is Claude Code's own count. How it splits is an estimate. Run /context in the session to see Claude Code's exact breakdown here.${c.windowAuto ? " The window size is a guess from the model and the largest context seen; pin it in Settings if it is wrong." : ""}`}
+          {session.provider === "codex"
+            ? "The total and the window size are Codex's own, from its session file. How the total splits is an estimate: the first request is the setup, and what was added since is shared between conversation and tool calls by how much text each wrote."
+            : c.reported
+              ? "Claude Code's own breakdown from the last /context run, plus what was added since (counted as messages). The window size is the one Claude Code reported."
+              : `The total is Claude Code's own count. How it splits is an estimate. Run /context in the session to see Claude Code's exact breakdown here.${c.windowAuto ? " The window size is a guess from the model and the largest context seen; pin it in Settings if it is wrong." : ""}`}
         </p>
       </div>
     </div>
