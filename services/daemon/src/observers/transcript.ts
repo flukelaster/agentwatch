@@ -497,7 +497,7 @@ export function startTranscriptObserver(opts: TranscriptOptions): { stop: () => 
       const wanted = manager.transcriptFor(s.id);
       if (!wanted) {
         // the hook says where the session file is; if it never does, this line is how to tell
-        if (isCodex && !noPath.has(s.id) && now - Date.parse(s.startedAt) > 30_000) {
+        if (isCodex && s.status !== "idle" && !noPath.has(s.id) && now - Date.parse(s.startedAt) > 30_000) {
           noPath.add(s.id);
           diagnostics.info("observer.context", "a codex session has not reported where its session file is, so its context cannot be read");
         }
