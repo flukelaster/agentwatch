@@ -14,3 +14,6 @@ apps/desktop/src-tauri/gen/
 apps/desktop/src-tauri/binaries/
 apps/desktop/src-tauri/runtime/
 .cache/
+
+# private planning notes
+docs/roadmap-ade.md
