@@ -1,7 +1,7 @@
 {
   "name": "agentwatch",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Local-only monitor for AI coding agents on macOS",
   "packageManager": "pnpm@10.29.2",
   "engines": {

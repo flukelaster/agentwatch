@@ -16,7 +16,7 @@ export interface DaemonConfig {
   version: string;
 }
 
-export const DAEMON_VERSION = "0.1.1";
+export const DAEMON_VERSION = "0.1.2";
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): DaemonConfig {
   const home = env.AGENTWATCH_HOME ?? join(homedir(), "Library", "Application Support", "AgentWatch");
